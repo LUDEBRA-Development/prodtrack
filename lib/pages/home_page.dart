@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prodtrack/pages/ingredients_page.dart';
 import 'package:prodtrack/pages/login_page.dart';
 import 'package:prodtrack/services/firebase_service.dart';
 import 'package:prodtrack/pages/supplier_pages/supplier_page.dart';
@@ -83,12 +82,14 @@ class _HomePageState extends State<HomePage> {
           ? Center(
               child:
                   CircularProgressIndicator()) // Mostrar un indicador de carga
-          : Column(
-              children: [
-                // Encabezado con saludo y versículo
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
+          : Container(
+              width: double.infinity, // Ancho completo
+              height: double.infinity, // Altura completa
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  // Encabezado con saludo y versículo
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CircleAvatar(
@@ -121,28 +122,45 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                ),
-                // Cuatro botones
-                Expanded(
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    padding: const EdgeInsets.all(16.0),
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
-                    //! Cambiar diseño estatico a que se mueva todo en el home page
-                    children: [
-                      menuButton(context, 'INVENTARIO', Icons.warehouse,
-                          Colors.blue, SupplierView()),
-                      menuButton(context, 'INGREDIENTES', Icons.filter_alt,
-                          Colors.green, IngredientsPage()),
-                      menuButton(context, 'PROVEEDORES', Icons.business,
-                          Colors.orange, SupplierView()),
-                      menuButton(context, 'FACTURAS', Icons.receipt, Colors.red,
-                          SupplierView()),
-                    ],
+                  SizedBox(
+                      height: 20), // Espacio entre el encabezado y los botones
+
+                  // Contenedor de botones que no se moverá
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          // Cuatro botones
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              menuButton(context, 'INVENTARIO', Icons.warehouse,
+                                  Colors.blue, SupplierView()),
+                              menuButton(
+                                  context,
+                                  'INGREDIENTES',
+                                  Icons.filter_alt,
+                                  Colors.green,
+                                  SupplierView()),
+                            ],
+                          ),
+                          SizedBox(
+                              height: 10), // Espacio entre filas de botones
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              menuButton(context, 'PROVEEDORES', Icons.business,
+                                  Colors.orange, SupplierView()),
+                              menuButton(context, 'FACTURAS', Icons.receipt,
+                                  Colors.red, SupplierView()),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
     );
   }
@@ -160,13 +178,17 @@ class _HomePageState extends State<HomePage> {
       },
       child: Card(
         color: color,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 50, color: Colors.white),
-            SizedBox(height: 10),
-            Text(title, style: TextStyle(color: Colors.white, fontSize: 18)),
-          ],
+        child: SizedBox(
+          width: 150, // Ancho fijo para los botones
+          height: 100, // Altura fija para los botones
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 50, color: Colors.white),
+              SizedBox(height: 10),
+              Text(title, style: TextStyle(color: Colors.white, fontSize: 18)),
+            ],
+          ),
         ),
       ),
     );
