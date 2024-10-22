@@ -29,14 +29,7 @@ class RegisterPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                          offset: Offset(2, 2),
-                          blurRadius: 3.0,
-                          color: Colors.black.withOpacity(0.5),
-                        ),
-                      ],
+                      color: Colors.black,
                     ),
                   ),
                 ),
