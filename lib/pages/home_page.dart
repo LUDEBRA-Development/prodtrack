@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prodtrack/pages/ingredients_page.dart';
 import 'package:prodtrack/pages/login_page.dart';
 import 'package:prodtrack/services/firebase_service.dart';
 import 'package:prodtrack/pages/supplier_pages/supplier_page.dart';
@@ -128,11 +129,12 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(16.0),
                     crossAxisSpacing: 10.0,
                     mainAxisSpacing: 10.0,
+                    //! Cambiar diseño estatico a que se mueva todo en el home page
                     children: [
                       menuButton(context, 'INVENTARIO', Icons.warehouse,
                           Colors.blue, SupplierView()),
                       menuButton(context, 'INGREDIENTES', Icons.filter_alt,
-                          Colors.green, SupplierView()),
+                          Colors.green, IngredientsPage()),
                       menuButton(context, 'PROVEEDORES', Icons.business,
                           Colors.orange, SupplierView()),
                       menuButton(context, 'FACTURAS', Icons.receipt, Colors.red,

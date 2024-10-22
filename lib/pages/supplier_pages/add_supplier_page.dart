@@ -66,7 +66,7 @@ class _CreateSupplierViewState extends State<CreateSupplierView> {
           children: [
           // Botón para agregar foto
           image(),
-          const SizedBox(height: 30,),
+          SizedBox(height: 30,),
           _buildTextField(_nameController, "Nombre", Icons.person),
           _buildTextField(_phoneController, "Teléfono", Icons.phone),
           _buildTextField(_gmailController, "Gmail", Icons.email),

@@ -4,7 +4,6 @@ import 'package:prodtrack/controllers/supplier_controller.dart';
 import 'package:prodtrack/models/Supplier.dart';
 import 'package:prodtrack/pages/supplier_pages/add_supplier_page.dart';
 import 'package:prodtrack/pages/supplier_pages/modifi_supplier_page.dart';
-import 'package:prodtrack/widgets/seach.dart';
 
 class SupplierView extends StatefulWidget {
   const SupplierView({super.key});
@@ -14,8 +13,16 @@ class SupplierView extends StatefulWidget {
 }
 
 class _SupplierViewState extends State<SupplierView> {
-  final SupplierController supplierController = Get.put(SupplierController()); // Controlador
-  final TextEditingController _searchController = TextEditingController();
+  final SupplierController supplierController =
+      Get.put(SupplierController()); // Controlador
+  Supplier newSupplier = Supplier(
+      name: 'Proveedor 2',
+      phone: '123456789',
+      gmail: 'proveedor1@gmail.com',
+      webSite: 'www.proveedor1.com',
+      address: 'Dirección 123',
+      nit: '1');
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -36,7 +43,7 @@ class _SupplierViewState extends State<SupplierView> {
           title: const Center(
             child: Text(
               "Proveedores",
-              style: TextStyle(color: Colors.black, fontSize: 40, fontFamily: "Regular", height: 20),
+              style: TextStyle(color: Colors.black, fontSize: 34, height: 20),
             ),
           ),
         ),
@@ -47,7 +54,7 @@ class _SupplierViewState extends State<SupplierView> {
         children: [
           Container(
             padding: const EdgeInsets.only(left: 40.0, right: 40.0),
-            child: searchBar(_searchController, "Buscar proveedores"),
+            child: searchBar(),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10.0, right: 90.0, top: 10.0),
@@ -69,16 +76,11 @@ class _SupplierViewState extends State<SupplierView> {
                           Get.to(() => ModifySupplierView(supplier: supplier));
                         },
                         title: Text(
-                          supplier.name,
+                          '${supplier.name} - ${supplier.phone}',
                           style: const TextStyle(
-                              color: Colors.black, fontSize: 35, fontFamily: "Regular"),
+                              color: Colors.black, fontSize: 20),
                         ),
-                        subtitle: Text(
-                          supplier.phone,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 20, fontFamily: "Regular"),
-                        ),
-                        leading: imageProfile(supplier),
+                        leading: avatar(supplier.name),
                         trailing: const Icon(
                           Icons.arrow_forward_ios,
                           color: Colors.black,
@@ -96,7 +98,29 @@ class _SupplierViewState extends State<SupplierView> {
     );
   }
 
-
+  Widget searchBar() {
+    return Container(
+      height: 40,
+      decoration: BoxDecoration(
+        color: const Color(0xFFcbcbcb),
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: TextField(
+        controller: _searchController,
+        style: const TextStyle(color: Colors.black),
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.only(bottom: 8),
+          hintText: "Buscar Proveedor",
+          hintStyle: TextStyle(color: Color(0xFF787878), fontSize: 17),
+          border: InputBorder.none,
+          icon: Padding(
+            padding: EdgeInsets.only(left: 10.0),
+            child: Icon(Icons.search, color: Colors.black),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget addSupplierButton() {
     return Container(
@@ -104,7 +128,7 @@ class _SupplierViewState extends State<SupplierView> {
       padding: const EdgeInsets.only(right: 5.0, top: 8.0, bottom: 8.0),
       child: ElevatedButton(
         onPressed: () {
-          Get.to(() => const CreateSupplierView());
+          Get.to(() => CreateSupplierView());
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFdcdcdc),
@@ -154,8 +178,6 @@ class _SupplierViewState extends State<SupplierView> {
         (firstLetter.codeUnitAt(0) - 'A'.codeUnitAt(0)) % colors.length;
 
     return CircleAvatar(
-      backgroundColor: getColorFromHex(colors[colorIndex]),
-      radius: 30,
       child: Text(
         firstLetter,
         style: const TextStyle(
@@ -163,6 +185,8 @@ class _SupplierViewState extends State<SupplierView> {
           fontSize: 32,
         ),
       ),
+      backgroundColor: getColorFromHex(colors[colorIndex]),
+      radius: 30,
     );
   }
 
@@ -170,27 +194,5 @@ class _SupplierViewState extends State<SupplierView> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(supplier.id.toString())),
     );
-  }
-
-    Widget imageProfile(Supplier supplier) {
-    return Image.network(
-       supplier.urlProfilePhoto.toString(),
-       loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-         if (loadingProgress == null) {
-           return child;
-         } else {
-           return Center(
-             child: CircularProgressIndicator(
-               value: loadingProgress.expectedTotalBytes != null
-                   ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
-                   : null,
-             ),
-           );
-         }
-       },
-       errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-         return avatar(supplier.urlProfilePhoto.toString());
-       },
-     );
   }
 }

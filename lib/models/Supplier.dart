@@ -44,7 +44,7 @@ class Supplier {
       webSite: map['webSite'] ?? '',
       address: map['address'] ?? '',
       nit: map['nit'] ?? '',
-      urlProfilePhoto: map['urlProfilePhoto']?? '',
+      urlProfilePhoto: map['urlProfilePhoto'] ?? '',
     );
   }
 
@@ -59,7 +59,7 @@ class Supplier {
       webSite: data['webSite'] ?? '',
       address: data['address'] ?? '',
       nit: data['nit'] ?? '',
-      urlProfilePhoto: data['urlProfilePhoto']?? '',
+      urlProfilePhoto: data['urlProfilePhoto'] ?? '',
     );
   }
 }
