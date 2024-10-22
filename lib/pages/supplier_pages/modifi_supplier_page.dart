@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:prodtrack/controllers/storage_Controller.dart';
 import 'package:prodtrack/controllers/supplier_controller.dart';
 import 'package:prodtrack/models/Supplier.dart';
 import 'dart:io';
@@ -16,6 +17,8 @@ class ModifySupplierView extends StatefulWidget {
 
 class _ModifySupplierViewState extends State<ModifySupplierView> {
   final SupplierController supplierController = Get.put(SupplierController());
+  final StorageController storageController = Get.put(StorageController());
+  
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _gmailController = TextEditingController();
@@ -38,11 +41,17 @@ class _ModifySupplierViewState extends State<ModifySupplierView> {
     // Aquí puedes establecer una imagen inicial si es necesario
   }
 
+
   Future<void> _pickImage() async {
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = pickedFile;
-    });
+    if (pickedFile != null) {
+        setState(() {
+            _image = pickedFile;
+        });
+        print('Imagen seleccionada: ${_image!.path}');
+    } else {
+        print('No se ha seleccionado ninguna imagen.');
+    }
   }
 
   @override
@@ -100,38 +109,43 @@ class _ModifySupplierViewState extends State<ModifySupplierView> {
       ),
     );
   }
+  
 
-  Widget image() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: _pickImage,
-          child: Container(
-            width: 130,
-            height: 130,
-            decoration: BoxDecoration(
-              color: const Color(0xFFcbcbcb),
-              shape: BoxShape.circle,
-              image: _image == null
-                  ? null
-                  : DecorationImage(
-                      image: FileImage(File(_image!.path)),
+
+Widget image() {
+    return GestureDetector(
+      onTap: _pickImage,
+      child: Container(
+        width: 130,
+        height: 130,
+        decoration: BoxDecoration(
+          color: const Color(0xFFcbcbcb),
+          shape: BoxShape.circle,
+          image: _image != null
+              ? DecorationImage(
+                  image: FileImage(File(_image!.path)),
+                  fit: BoxFit.cover,
+                )
+              : widget.supplier.urlProfilePhoto != null
+                  ? DecorationImage(
+                      image: NetworkImage(widget.supplier.urlProfilePhoto!),
                       fit: BoxFit.cover,
-                    ),
-            ),
-            child: _image == null
-                ? const Icon(
-                    Icons.add_a_photo,
-                    color: Colors.black,
-                    size: 80,
-                  )
-                : null,
-          ),
+                    )
+                  : null,
         ),
-      ],
+        child: _image == null && widget.supplier.urlProfilePhoto == null
+            ? const Icon(
+                Icons.add_a_photo,
+                color: Colors.black,
+                size: 80,
+              )
+            : null,
+      ),
     );
-  }
+}
+
+
+
 
 
   Widget bottomDelete(){
@@ -170,25 +184,38 @@ class _ModifySupplierViewState extends State<ModifySupplierView> {
     );
   }
 
-  Widget bottomUpdate(){
+  Widget bottomUpdate() {
     return IconButton(
-            icon: const Icon(Icons.edit, color: Colors.black, size: 50,),
-            onPressed: () async {
-              Supplier updatedSupplier = Supplier(
-                id: widget.supplier.id,
-                name: _nameController.text,
-                phone: _phoneController.text,
-                gmail: _gmailController.text,
-                webSite: _webSiteController.text,
-                address: _addressController.text,
-                nit: _nitController.text,
-              );
-              await supplierController.updateSupplier(updatedSupplier);
-              Navigator.of(context).pop(); // Volver a la vista anterior
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("${updatedSupplier.name} actualizado")),
-              );
+      icon: const Icon(Icons.edit, color: Colors.black, size: 50),
+      onPressed: () async {
+        String? profilePhotoUrl = widget.supplier.urlProfilePhoto; 
+        
+        if (_image != null) {
+          profilePhotoUrl = await storageController.uploadImage(File(_image!.path));
+          print(profilePhotoUrl);
+        }
+
+        
+        Supplier updatedSupplier = Supplier(
+          id: widget.supplier.id,
+          name: _nameController.text,
+          phone: _phoneController.text,
+          gmail: _gmailController.text,
+          webSite: _webSiteController.text,
+          address: _addressController.text,
+          nit: _nitController.text,
+          urlProfilePhoto: profilePhotoUrl, 
+        );
+
+       
+        await supplierController.updateSupplier(updatedSupplier);
+
+        Navigator.of(context).pop(); 
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("${updatedSupplier.name} actualizado")),
+        );
       },
     );
   }
+
 }
