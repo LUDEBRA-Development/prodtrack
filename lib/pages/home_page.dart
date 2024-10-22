@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prodtrack/pages/ingredients_page.dart';
 import 'package:prodtrack/pages/login_page.dart';
 import 'package:prodtrack/services/firebase_service.dart';
 import 'package:prodtrack/pages/supplier_pages/supplier_page.dart';
@@ -141,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                                   'INGREDIENTES',
                                   Icons.filter_alt,
                                   Colors.green,
-                                  SupplierView()),
+                                  IngredientsPage()),
                             ],
                           ),
                           SizedBox(

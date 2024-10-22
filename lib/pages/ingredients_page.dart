@@ -43,11 +43,9 @@ class _IngredientPageState extends State<IngredientsPage> {
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            padding: const EdgeInsets.only(left: 40.0, right: 40.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40.0),
             child: searchBar(),
           ),
           Padding(
@@ -56,7 +54,7 @@ class _IngredientPageState extends State<IngredientsPage> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 40.0, right: 40.0),
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
               child: Obx(() {
                 if (ingredientController.filteredIngredients.isEmpty) {
                   return const Center(
@@ -66,8 +64,9 @@ class _IngredientPageState extends State<IngredientsPage> {
                   return GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // Cantidad de cards por fila
-                      childAspectRatio: 1.5, // Relación de aspecto del card
+                      crossAxisCount: 2, // Cards por fila
+                      childAspectRatio:
+                          0.75, // Relación de aspecto para achicar
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
                     ),
@@ -154,7 +153,7 @@ class _IngredientPageState extends State<IngredientsPage> {
         elevation: 5,
         child: Column(
           children: [
-            // Parte superior
+            // Parte superior con color e inicial
             Container(
               decoration: BoxDecoration(
                 color: getColorFromHex(ingredient.name),
@@ -163,7 +162,7 @@ class _IngredientPageState extends State<IngredientsPage> {
                   topRight: Radius.circular(10.0),
                 ),
               ),
-              height: 250, // Altura de la parte superior
+              height: 80, // Ajustar el tamaño de la parte superior
               width: double.infinity,
               child: Center(
                 child: Text(
@@ -176,10 +175,10 @@ class _IngredientPageState extends State<IngredientsPage> {
                 ),
               ),
             ),
-            // Parte inferior
+            // Parte inferior con nombre y cantidad
             Expanded(
               child: Container(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -191,7 +190,7 @@ class _IngredientPageState extends State<IngredientsPage> {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      "Cantidad en el Inventario: ${ingredient.quantityInInventory.toString()}",
+                      "Cantidad en el Inventario: ${ingredient.quantityInInventory}",
                       style: const TextStyle(fontSize: 16, color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
