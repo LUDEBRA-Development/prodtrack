@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodtrack/pages/home_page.dart';
-import 'package:prodtrack/pages/reports_pages.dart';
+import 'package:prodtrack/pages/report_pages/report_page.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:prodtrack/pages/user_page/user_pages.dart';
 
@@ -15,7 +15,7 @@ class _indexPagesState extends State<indexPages> {
   int _selectedIndex = 0;
 
   // Define las páginas aquí sin necesidad de contexto
-  static List<Widget> _pages = <Widget>[HomePage(), reports(), UserPage()];
+  static List<Widget> _pages = <Widget>[HomePage(), ReportPage(), UserPage()];
 
   @override
   Widget build(BuildContext context) {
