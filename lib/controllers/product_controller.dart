@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 
 class ProductController extends GetxController{
   final ProductService _productService = ProductService();
-  RxList<Product> notes = <Product>[].obs;        
-  RxList<Product> filteredNotes = <Product>[].obs;   
+  RxList<Product> product = <Product>[].obs;        
+  RxList<Product> filteredProducts = <Product>[].obs;   
   @override
   void onInit() {
     super.onInit();
@@ -13,18 +13,18 @@ class ProductController extends GetxController{
   }
 
   void fetchProdcuts() async {
-    notes.value = await _productService.getAllProducts();
-    filteredNotes.value = notes; 
+    product.value = await _productService.getAllProducts();
+    filteredProducts.value = product; 
   }
 
 
   void filterProducts(String query) {
     if (query.isEmpty) {
-      // Si el campo de búsqueda está vacío, mostrar todod profuctos
-      filteredNotes.value = notes;
+      
+      filteredProducts.value = product;
     } else {
-      // Filtrar los productos
-      filteredNotes.value = notes.where((note) {
+      
+      filteredProducts.value = product.where((note) {
         return note.name.toLowerCase().contains(query.toLowerCase()) ||
                note.description.toLowerCase().contains(query.toLowerCase());
       }).toList();

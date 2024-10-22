@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prodtrack/controllers/supplier_controller.dart';
-import 'package:prodtrack/models/Supplier.dart';
-import 'package:prodtrack/pages/supplier_pages/add_supplier_page.dart';
-import 'package:prodtrack/pages/supplier_pages/modifi_supplier_page.dart';
+import 'package:prodtrack/controllers/product_controller.dart';
 import 'package:prodtrack/widgets/seach.dart';
 
-class SupplierView extends StatefulWidget {
-  const SupplierView({super.key});
+class ProductView extends StatefulWidget {
+  const ProductView({super.key});
 
   @override
-  State<SupplierView> createState() => _SupplierViewState();
+  State<ProductView> createState() => _ProductViewState();
 }
 
-class _SupplierViewState extends State<SupplierView> {
-  final SupplierController supplierController = Get.put(SupplierController()); // Controlador
+class _ProductViewState extends State<ProductView> {
+  final ProductController productController = Get.put(ProductController()); // Controlador
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(() {
-      supplierController.filterSuppliers(_searchController.text);
+      productController.filterProducts(_searchController.text);
     });
   }
 
@@ -35,8 +32,8 @@ class _SupplierViewState extends State<SupplierView> {
           backgroundColor: const Color(0xFFdcdcdc),
           title: const Center(
             child: Text(
-              "Proveedores",
-              style: TextStyle(color: Colors.black, fontSize: 40, fontFamily: "Regular", height: 20),
+              "Productos",
+              style: TextStyle(color: Colors.black, fontSize: 34, height: 20),
             ),
           ),
         ),
@@ -47,38 +44,32 @@ class _SupplierViewState extends State<SupplierView> {
         children: [
           Container(
             padding: const EdgeInsets.only(left: 40.0, right: 40.0),
-            child: searchBar(_searchController, "Buscar proveedores"),
+            child: searchBar(_searchController, "Buscar productos"),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10.0, right: 90.0, top: 10.0),
-            child: addSupplierButton(),
+            child: addProductButton(),
           ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 40.0, right: 40.0),
               child: Obx(() {
                 return ListView.builder(
-                  itemCount: supplierController.filteredSuppliers.length,
+                  itemCount: productController.filteredProducts.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final supplier =
-                        supplierController.filteredSuppliers[index];
+                    final product = productController.filteredProducts[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
                       child: ListTile(
                         onTap: () {
-                          Get.to(() => ModifySupplierView(supplier: supplier));
+                          print(product.id);
                         },
                         title: Text(
-                          supplier.name,
+                          '${product.name} - \$${product.boxPrice}',
                           style: const TextStyle(
-                              color: Colors.black, fontSize: 35, fontFamily: "Regular"),
+                              color: Colors.black, fontSize: 20),
                         ),
-                        subtitle: Text(
-                          supplier.phone,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 20, fontFamily: "Regular"),
-                        ),
-                        leading: imageProfile(supplier),
+                        leading: avatar(product.name),
                         trailing: const Icon(
                           Icons.arrow_forward_ios,
                           color: Colors.black,
@@ -96,15 +87,14 @@ class _SupplierViewState extends State<SupplierView> {
     );
   }
 
-
-
-  Widget addSupplierButton() {
+  Widget addProductButton() {
     return Container(
       color: const Color(0xFFdcdcdc),
       padding: const EdgeInsets.only(right: 5.0, top: 8.0, bottom: 8.0),
       child: ElevatedButton(
         onPressed: () {
-          Get.to(() => const CreateSupplierView());
+          print("Agregar producto");
+          /* Get.to(() => const AddProductPage()); */
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFdcdcdc),
@@ -114,13 +104,13 @@ class _SupplierViewState extends State<SupplierView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              Icons.person_add_alt_1_sharp,
+              Icons.add_box,
               color: Color.fromRGBO(0, 0, 0, 1),
               size: 48,
             ),
             SizedBox(width: 30),
             Text(
-              "Añadir Proveedor",
+              "Añadir Producto",
               style: TextStyle(color: Colors.black, fontSize: 20),
             ),
           ],
@@ -147,7 +137,7 @@ class _SupplierViewState extends State<SupplierView> {
     }
 
     // Obtener la letra inicial y convertirla a mayúscula
-    String firstLetter = name.isNotEmpty ? name[0].toUpperCase() : 'A';
+    String firstLetter = name.isNotEmpty ? name[0].toUpperCase() : 'P';
 
     // Calcular el índice basado en la letra inicial (A=0, B=1, ..., Z=25)
     int colorIndex =
@@ -164,33 +154,5 @@ class _SupplierViewState extends State<SupplierView> {
         ),
       ),
     );
-  }
-
-  void printSupplier(Supplier supplier) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(supplier.id.toString())),
-    );
-  }
-
-    Widget imageProfile(Supplier supplier) {
-    return Image.network(
-       supplier.urlProfilePhoto.toString(),
-       loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-         if (loadingProgress == null) {
-           return child;
-         } else {
-           return Center(
-             child: CircularProgressIndicator(
-               value: loadingProgress.expectedTotalBytes != null
-                   ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
-                   : null,
-             ),
-           );
-         }
-       },
-       errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-         return avatar(supplier.urlProfilePhoto.toString());
-       },
-     );
   }
 }
