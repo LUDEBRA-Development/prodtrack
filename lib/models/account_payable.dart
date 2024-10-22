@@ -53,7 +53,7 @@ class AccountPayable {
           ? Supplier.fromMap(data['beneficiary']) // Crear Supplier desde el map
           : Employee.fromMap(data['beneficiary']), // Crear Employee desde el map
       dueDate: DateTime.parse(data['dueDate']), // Parsear la fecha
-      amount: data['amount'] ?? 0.0, // Asignar el monto
+      amount: (data['amount'] as num).toDouble(), 
       isPaid: data['isPaid'] ?? false, // Asignar estado de pago
     );
   }

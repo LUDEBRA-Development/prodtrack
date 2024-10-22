@@ -8,25 +8,28 @@ class ReportPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:const Color(0xFF00875E),
-        title: const Center(child: Text("Informes",
-          style: TextStyle(
-            fontSize: 50,
-            fontFamily: "Regular",
-            color: Colors.white
+        backgroundColor: const Color(0xFF00875E),
+        title: const Center(
+          child: Text(
+            "Informes",
+            style: TextStyle(
+              fontSize: 50,
+              fontFamily: "Regular",
+              color: Colors.white,
+            ),
           ),
-        )),
+        ),
       ),
-      backgroundColor:const  Color(0xFFDCDCDC),
-      body: 
-      Center( 
-        
-        child: Column(
-          children: [
-            report("Mis Finanzas", "Cuentas Por Pagar", Icons.account_balance_wallet, "Análisis De Gastos", Icons.bar_chart),
-            report("Mi  Empresa ", "Precio De Productos", Icons.price_check, "Análisis De Ventas", Icons.insights),
-          ],
-        )
+      backgroundColor: const Color(0xFFDCDCDC),
+      body: SingleChildScrollView(  // Permitir scroll en caso de desbordamiento
+        child: Center(
+          child: Column(
+            children: [
+              report("Mis Finanzas", "Cuentas Por Pagar", Icons.account_balance_wallet, "Análisis De Gastos", Icons.bar_chart),
+              report("Mi  Empresa ", "Precio De Productos", Icons.price_check, "Análisis De Ventas", Icons.insights),
+            ],
+          ),
+        ),
       ),
     );
   }
