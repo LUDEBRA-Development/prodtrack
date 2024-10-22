@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prodtrack/pages/user_page/user_edit_pages.dart';
 import 'package:prodtrack/controllers/user_controller.dart';
+import 'package:prodtrack/pages/user_page/user_edit_pages.dart';
 
 class UserPage extends StatelessWidget {
   final UserController userController = Get.put(UserController());
@@ -31,19 +31,10 @@ class UserPage extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context); // Cerrar diálogo
-                        // Asegurarte de que el usuario no es nulo
                         if (userController.user.value != null) {
                           // Navegar a la página de edición
-                          Get.to(() => UserEditPage(
-                              user: userController.user
-                                  .value!)); // Agrega el operador ! para asegurar que no es nulo
-                        } else {
-                          // Manejar el caso donde no hay usuario
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content:
-                                    Text('No se pudo encontrar al usuario')),
-                          );
+                          Get.to(() =>
+                              UserEditPage(user: userController.user.value!));
                         }
                       },
                       child: const Text('Editar'),
@@ -76,12 +67,16 @@ class UserPage extends StatelessWidget {
 
           return Column(
             children: [
-              // Mostrar imagen de usuario
               CircleAvatar(
                 radius: 60,
                 backgroundColor: Colors.grey[300],
-                backgroundImage: NetworkImage(user.photoUrl ??
-                    ''), // Asegúrate de que photoUrl esté definido
+                backgroundImage:
+                    user.photoUrl != null && user.photoUrl!.isNotEmpty
+                        ? NetworkImage(user.photoUrl!)
+                        : null,
+                child: user.photoUrl == null || user.photoUrl!.isEmpty
+                    ? const Icon(Icons.person, size: 60, color: Colors.black)
+                    : null,
               ),
               const SizedBox(height: 20),
               _buildInfoField('Nombre', user.name),

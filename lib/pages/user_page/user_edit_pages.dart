@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:prodtrack/controllers/storage_controller.dart'; // Importar StorageController
 import 'package:prodtrack/controllers/user_controller.dart';
 import 'package:prodtrack/models/user_model.dart';
 import 'dart:io';
@@ -16,6 +17,8 @@ class UserEditPage extends StatefulWidget {
 
 class _UserEditPageState extends State<UserEditPage> {
   final UserController userController = Get.put(UserController());
+  final StorageController storageController =
+      Get.put(StorageController()); // Inicializar StorageController
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -107,14 +110,19 @@ class _UserEditPageState extends State<UserEditPage> {
             decoration: BoxDecoration(
               color: const Color(0xFFcbcbcb),
               shape: BoxShape.circle,
-              image: _image == null
-                  ? null
-                  : DecorationImage(
+              image: _image != null
+                  ? DecorationImage(
                       image: FileImage(File(_image!.path)),
                       fit: BoxFit.cover,
-                    ),
+                    )
+                  : widget.user.photoUrl != null
+                      ? DecorationImage(
+                          image: NetworkImage(widget.user.photoUrl!),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
             ),
-            child: _image == null
+            child: _image == null && widget.user.photoUrl == null
                 ? const Icon(
                     Icons.add_a_photo,
                     color: Colors.black,
@@ -131,14 +139,22 @@ class _UserEditPageState extends State<UserEditPage> {
     return IconButton(
       icon: const Icon(Icons.edit, color: Colors.black, size: 50),
       onPressed: () async {
+        String? profilePhotoUrl = widget.user.photoUrl;
+
+        if (_image != null) {
+          profilePhotoUrl =
+              await storageController.uploadImage(File(_image!.path));
+        }
+
         UserModel updatedUser = UserModel(
           id: widget.user.id,
           name: _nameController.text,
           lastName: _lastNameController.text,
           email: _emailController.text,
           phone: _phoneController.text,
-          // Aquí puedes agregar la lógica para manejar la imagen si es necesario
+          photoUrl: profilePhotoUrl, // Actualizar URL de la foto
         );
+
         await userController.updateUser(updatedUser);
         Navigator.of(context).pop(); // Volver a la vista anterior
         ScaffoldMessenger.of(context).showSnackBar(
