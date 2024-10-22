@@ -48,8 +48,7 @@ class _IngredientPageState extends State<IngredientsPage> {
             padding: const EdgeInsets.symmetric(horizontal: 40.0),
             child: searchBar(),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 90.0, top: 10.0),
+          Center(
             child: addIngredientButton(),
           ),
           Expanded(
