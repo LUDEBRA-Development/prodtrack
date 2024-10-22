@@ -185,13 +185,13 @@ class _IngredientPageState extends State<IngredientsPage> {
                     Text(
                       ingredient.name,
                       style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 15, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      "Cantidad en el Inventario: ${ingredient.quantityInInventory}",
-                      style: const TextStyle(fontSize: 16, color: Colors.grey),
+                      "Cantidad: ${ingredient.quantityInInventory}",
+                      style: const TextStyle(fontSize: 13, color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
                   ],

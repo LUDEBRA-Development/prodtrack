@@ -38,8 +38,8 @@ class _ModifyIngredientViewState extends State<ModifyIngredientView> {
     _quantityInInventoryController.text =
         widget.ingredient.quantityInInventory.toString();
     _priceController.text = widget.ingredient.price.toString();
-    _supplierController.text = widget.ingredient.supplier.toString();
-    _undController.text = widget.ingredient.und.toString();
+    _supplierController.text = widget.ingredient.supplier.name.toString();
+    _undController.text = widget.ingredient.und.name.toString();
   }
 
   Future<void> _pickImage() async {
