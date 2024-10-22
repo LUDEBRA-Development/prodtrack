@@ -8,6 +8,7 @@ class Supplier {
   final String? webSite;
   final String address;
   final String nit;
+  final String? urlProfilePhoto;
 
   Supplier({
     this.id, // Agrega el id como un parámetro opcional
@@ -17,6 +18,7 @@ class Supplier {
     required this.webSite,
     required this.address,
     required this.nit,
+    this.urlProfilePhoto,
   });
 
   // Método toMap
@@ -28,6 +30,7 @@ class Supplier {
       'webSite': webSite,
       'address': address,
       'nit': nit,
+      'urlProfilePhoto': urlProfilePhoto,
     };
   }
 
@@ -41,6 +44,7 @@ class Supplier {
       webSite: map['webSite'] ?? '',
       address: map['address'] ?? '',
       nit: map['nit'] ?? '',
+      urlProfilePhoto: map['urlProfilePhoto']?? '',
     );
   }
 
@@ -55,6 +59,7 @@ class Supplier {
       webSite: data['webSite'] ?? '',
       address: data['address'] ?? '',
       nit: data['nit'] ?? '',
+      urlProfilePhoto: data['urlProfilePhoto']?? '',
     );
   }
 }
