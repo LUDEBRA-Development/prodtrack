@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prodtrack/controllers/employee_contoller.dart';
-import 'package:prodtrack/models/employee.dart';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:prodtrack/models/product.dart';
