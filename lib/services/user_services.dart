@@ -18,8 +18,20 @@ class UserService {
     return null; // Si no existe, retornar null
   }
 
-  // Actualizar información del usuario
+  
   Future<void> updateUser(UserModel user) async {
     await _firestore.collection('users').doc(user.id).update(user.toMap());
+  }
+
+  Future<List<UserModel>> getAllUsers() async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore.collection('users').get();
+
+      return querySnapshot.docs.map((doc) {
+        return UserModel.fromDocument(doc);
+      }).toList();
+    } catch (e) {
+      return [];
+    }
   }
 }

@@ -13,8 +13,7 @@ class SupplierService {
 
   // Leer (Obtener) todos los proveedores
   Future<List<Supplier>> getAllSuppliers() async {
-    QuerySnapshot snapshot =
-        await _firestore.collection(supplierCollection).get();
+    QuerySnapshot snapshot = await _firestore.collection(supplierCollection).get();
     return snapshot.docs.map((doc) => Supplier.fromDocument(doc)).toList();
   }
 

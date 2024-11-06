@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:prodtrack/pages/index_pages.dart';
 // import 'package:prodtrack/pages/index_pages.dart';
 import 'package:prodtrack/pages/login_page.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(), // La página principal de tu aplicación.
+      home: indexPages(), // La página principal de tu aplicación.
     );
   }
 }

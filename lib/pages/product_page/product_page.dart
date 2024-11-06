@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prodtrack/controllers/product_controller.dart';
+import 'package:prodtrack/pages/product_page/add_product_page.dart';
+import 'package:prodtrack/pages/product_page/modifify_product_page.dart';
 import 'package:prodtrack/widgets/seach.dart';
 
 class ProductView extends StatefulWidget {
@@ -62,13 +64,14 @@ class _ProductViewState extends State<ProductView> {
                       padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
                       child: ListTile(
                         onTap: () {
-                          print(product.id);
+                          Get.to(() => ModifyProductView(product: product));
                         },
                         title: Text(
-                          '${product.name} - \$${product.boxPrice}',
+                          '${product.name} - \$${product.boxPrice.toStringAsFixed(2)}',
                           style: const TextStyle(
                               color: Colors.black, fontSize: 20),
                         ),
+                        subtitle: Text('Cantidad: ${product.quantity}'),
                         leading: avatar(product.name),
                         trailing: const Icon(
                           Icons.arrow_forward_ios,
@@ -93,12 +96,11 @@ class _ProductViewState extends State<ProductView> {
       padding: const EdgeInsets.only(right: 5.0, top: 8.0, bottom: 8.0),
       child: ElevatedButton(
         onPressed: () {
-          print("Agregar producto");
-          /* Get.to(() => const AddProductPage()); */
+          Get.to(()=> const CreateProductView());
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFdcdcdc),
-          elevation: 0,
+          elevation: 0, 
         ),
         child: const Row(
           mainAxisSize: MainAxisSize.min,

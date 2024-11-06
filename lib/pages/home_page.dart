@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prodtrack/pages/ingredients_page.dart';
+import 'package:prodtrack/pages/ingredients_page/ingredients_page.dart';
 import 'package:prodtrack/pages/login_page.dart';
+import 'package:prodtrack/pages/product_page/product_page.dart';
+import 'package:prodtrack/pages/report_pages/account_payable/accounts_payable.dart';
+import 'package:prodtrack/pages/report_pages/price_product/price_product_report.dart';
 import 'package:prodtrack/services/firebase_service.dart';
 import 'package:prodtrack/pages/supplier_pages/supplier_page.dart';
 
@@ -34,8 +37,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 241, 241, 241),
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         title: Text('PRODTRACK'),
         centerTitle: true,
         actions: [
@@ -50,7 +54,7 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-            DrawerHeader(
+           const DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.teal,
               ),
@@ -60,17 +64,40 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
-              title: Text('Opción 1'),
-              onTap: () {},
+              title: const Text('Inventario'),
+              onTap: () {
+                  Get.to(()=> Scaffold(
+                    appBar: AppBar(
+                      backgroundColor: Colors.white,
+                      title:  const Text("Inventario"),
+                    ),
+                    body: const PriceProductReport(),
+                  ), 
+                );
+              },
             ),
             ListTile(
-              title: Text('Opción 2'),
-              onTap: () {},
+              title: const Text('Gestion financiera'),
+              onTap: () {
+                  Get.to(()=> Scaffold(
+                    appBar: AppBar(
+                      backgroundColor: Colors.white,
+                      title:  const Text("Gestioin de finanzas"),
+                    ),
+                    body: const AccountsPayableView(),
+                  )); 
+              },
             ),
-            Spacer(),
             ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Cerrar sesión'),
+              title: const Text('Gestion de usuarios'),
+              onTap: () {
+                 Get.snackbar("Error", "Proximante, funcion en desarrollo");
+              },
+            ),
+            const Spacer(),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Cerrar sesión'),
               onTap: () async {
                 await _firebaseService.signOut();
                 Get.offAll(() => LoginPage());
@@ -136,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               menuButton(context, 'INVENTARIO', Icons.warehouse,
-                                  Colors.blue, SupplierView()),
+                                  Colors.blue,const  ProductView()),
                               menuButton(
                                   context,
                                   'INGREDIENTES',

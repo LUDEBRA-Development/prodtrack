@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:prodtrack/controllers/storage_controller.dart'; // Importar StorageController
+import 'package:prodtrack/controllers/storage_Controller.dart';
 import 'package:prodtrack/controllers/user_controller.dart';
 import 'package:prodtrack/models/user_model.dart';
 import 'dart:io';

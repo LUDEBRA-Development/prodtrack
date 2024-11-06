@@ -30,89 +30,77 @@ class _AccountsPayableViewState extends State<AccountsPayableView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFdcdcdc),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70.0),
-        child: AppBar(
-          backgroundColor: const Color(0xFFdcdcdc),
-          title: const Center(
-            child:  Text(
-              "Cuentas por Pagar",
-              style: TextStyle(color: Colors.black, fontSize: 34, height: 20),
+      backgroundColor: const Color.fromARGB(255, 241, 241, 241),
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0, top: 10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
+              child: searchBar(_searchController, "Buscar"),
             ),
-          ),
-        ),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 40.0),
-            child: searchBar(_searchController, "Buscar"),
-          ),
-          const SizedBox(height: 10),
-          
-          // Filtrar por estado usando botones
-          filterAccountsPayableSelector(),
 
-          const SizedBox(height: 10),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: Obx(() {
-                return ListView.builder(
-                  itemCount: accountPayableController.filteredAccountsPayable.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final  account = accountPayableController.filteredAccountsPayable[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: ListTile(
-                        onTap: () {
-                          Get.to(()=> ModifyAccountPayableView(account : account))  ;
-                          // Aquí podrías redirigir a una vista para modificar la cuenta por pagar
-                          // Get.to(() => ModifyAccountPayableView(account: account));
-                        },
-                        title: Text(
-                          '${account.beneficiary.name} ',
-                          style: const TextStyle(color: Colors.black, fontSize: 20),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Fecha: ${account.formattedDueDate}',
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            Text(
-                              account.isPaid ? "Pagado" : "Pendiente",
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: account.isPaid ? Colors.green : Colors.red,
+            const SizedBox(height: 10),
+            filterAccountsPayableSelector(),
+            
+            const SizedBox(height: 10),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Obx(() {
+                  return ListView.builder(
+                    itemCount: accountPayableController.filteredAccountsPayable.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final  account = accountPayableController.filteredAccountsPayable[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: ListTile(
+                          onTap: () {
+                            Get.to(()=> ModifyAccountPayableView(account : account))  ;
+                          },
+                          title: Text(
+                            '${account.beneficiary.name} ',
+                            style: const TextStyle(color: Colors.black, fontSize: 20),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Fecha: ${account.formattedDueDate}',
+                                style: const TextStyle(fontSize: 16),
                               ),
+                              Text(
+                                account.isPaid ? "Pagado" : "Pendiente",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: account.isPaid ? Colors.green : Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                          leading: imageProfile(account),
+                          trailing: Text(
+                            '\$${account.amount.toStringAsFixed(2).replaceAllMapped(
+                              RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+                              (Match m) => '${m[1]},',
+                            )}',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: account.isPaid ? Colors.green : Colors.red,
                             ),
-                          ],
-                        ),
-                        leading: imageProfile(account),
-                        trailing: Text(
-                          '\$${account.amount.toStringAsFixed(2).replaceAllMapped(
-                            RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
-                            (Match m) => '${m[1]},',
-                          )}',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: account.isPaid ? Colors.green : Colors.red,
                           ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              }),
+                      );
+                    },
+                  );
+                }),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

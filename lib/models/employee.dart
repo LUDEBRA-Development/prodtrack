@@ -3,7 +3,6 @@ class Employee {
   final String name;
   final String? urlProfilePhoto;
 
-
   Employee({
     required this.id,
     required this.name,
@@ -25,4 +24,14 @@ class Employee {
       urlProfilePhoto: map['urlProfilePhoto'],
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Employee && other.id == id; // Comparar por id
+  }
+
+  @override
+  int get hashCode => id.hashCode; // Usar el id para hashCode
 }

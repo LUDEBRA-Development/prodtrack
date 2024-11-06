@@ -57,6 +57,16 @@ class IngredientsController extends GetxController {
       }).toList();
     }
   }
+  void filterIngredientByIdAndByQuantityInInventory(String query) {
+    if (query.isEmpty) {
+      filteredIngredients.value = ingredients;
+    } else {
+      filteredIngredients.value = ingredients.where((ingredient) {
+        return ingredient.name.toLowerCase().contains(query.toLowerCase()) ||
+            ingredient.price.toString().contains(query.toLowerCase());
+      }).toList();
+    }
+  }
 
   // Agregar un ingrediente con ID autoincrementable
   Future<void> addIngredient(Ingredient ingredient) async {

@@ -11,16 +11,20 @@ class ProductService {
 
   // Leer todos los productos
   Future<List<Product>> getAllProducts() async {
-    final snapshot = await _productCollection.get(); 
+    QuerySnapshot snapshot = await _productCollection.get(); 
     return snapshot.docs.map((doc) {
       return Product.fromMap(doc.data() as Map<String, dynamic>)
         ..id = doc.id; 
     }).toList();
+
   }
 
   // Actualizar un producto
   Future<void> updateProduct(Product product) async {
     await _productCollection.doc(product.id).update(product.toMap());
+  }
+  Future<void> updateProductByQuuantity(String? id, int quantity) async {
+    await _productCollection.doc(id).update({'quantity': quantity});
   }
 
   // Eliminar un producto

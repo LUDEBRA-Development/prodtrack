@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Ingredient {
   String? id; // final String id
   final String name;
-  final double quantityUsed;
+  double quantityUsed;
   double quantityInInventory;
   final double price;
   final Supplier supplier;
