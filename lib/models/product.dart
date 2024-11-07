@@ -50,6 +50,30 @@ class Product {
   }
 
 
+  Product copyWith({
+    String? id,
+    String? name,
+    String? description,
+    Box? box,
+    int? quantity,
+    Packing? packing,
+    List<Ingredient>? ingredients,
+    double? priceLabel,
+    double? priceLabeled,
+  }){
+    return Product(
+      id ?? this.id,
+      name ?? this.name,
+      description ?? this.description,
+      quantity ?? this.quantity,
+      packing ?? this.packing,
+      box ?? this.box,
+      ingredients ?? this.ingredients,
+      priceLabel ?? this.priceLabel,
+      priceLabeled ?? this.priceLabeled,
+    );
+  }
+
  //Precio total del producto fabricado (ejemplo: 140 Litros de esencia de kola valen $500.000)
   get _totalPriceInput{ 
     double totalPriceProduct = 0.0;

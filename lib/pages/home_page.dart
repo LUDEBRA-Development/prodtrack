@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prodtrack/pages/ingredients_page/ingredients_page.dart';
+import 'package:prodtrack/pages/invoices_page/invoices_page.dart';
 import 'package:prodtrack/pages/login_page.dart';
 import 'package:prodtrack/pages/product_page/product_page.dart';
 import 'package:prodtrack/pages/report_pages/account_payable/accounts_payable.dart';
@@ -192,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                                   'FACTURAS',
                                   Icons.receipt,
                                   Colors.red,
-                                  const SupplierView(),
+                                   InvoicesPageView(),
                                 ),
                               ],
                             ),
@@ -236,4 +237,5 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
 }

@@ -343,79 +343,79 @@ Widget _buildIngredientSection() {
 }
 
 
-void _showQuantityDialog(int index) {
-  final ingredient = ingredientsController.filteredIngredients[index];
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text("Cantidad de ${ingredient.name}"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Dropdown para seleccionar la unidad (kg o g)
-            DropdownButton<String>(
-              hint: const Text("Seleccionar unidad"),
-              value: _selectedUnit,
-              items: <String>['kg', 'g'].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedUnit = newValue; 
-                });
+  void _showQuantityDialog(int index) {
+    final ingredient = ingredientsController.filteredIngredients[index];
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Cantidad de ${ingredient.name}"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Dropdown para seleccionar la unidad (kg o g)
+              DropdownButton<String>(
+                hint: const Text("Seleccionar unidad"),
+                value: _selectedUnit,
+                items: <String>['kg', 'g'].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedUnit = newValue; 
+                  });
+                },
+              ),
+              TextField(
+                controller: _ingredientQuantityController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(hintText: "Cantidad"),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cierra el diálogo
               },
+              child: const Text("Cancelar"),
             ),
-            TextField(
-              controller: _ingredientQuantityController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(hintText: "Cantidad"),
+            TextButton(
+              onPressed: () {
+                // Obtiene la cantidad ingresada
+                double ingredientQuantity = double.tryParse(_ingredientQuantityController.text) ?? 0;
+                if(_selectedUnit == 'g'){
+                  ingredientQuantity = ingredientQuantity / 1000;
+                }
+                if (ingredientQuantity > 0 && _selectedUnit != null && ingredientQuantity  <= ingredient.quantityInInventory) {
+                  ingredientsController.filteredIngredients[index].quantityInInventory = ingredient.quantityInInventory - ingredientQuantity;  // Restamos la cantidad
+                  double quantityToStore = ingredientQuantity;
+
+
+                  // Convertir gramos a kilogramos si la unidad seleccionada es gramos
+                  if (_selectedUnit == 'g') {
+                    quantityToStore = ingredientQuantity / 1000; // Conversión de g a kg
+                  }
+                  setState(() {
+                    ingredient.quantityUsed = quantityToStore; // Almacena la cantidad en kg
+                  // Guarda la unidad seleccionada
+                    selectedIngredients.add(ingredient); // Agrega el ingrediente a la lista
+                  });
+                    Get.snackbar("Mensaje", "${ingredient.name} agregado con cantidad: ${quantityToStore.toStringAsFixed(2)} kg");
+                  Navigator.of(context).pop(); // Cierra el diálogo de cantidad
+                } else {
+                  Get.snackbar("Error", "Por favor, ingresa una cantidad válida y selecciona una unidad");}
+              },
+              child: const Text("Agregar"),
             ),
           ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Cierra el diálogo
-            },
-            child: const Text("Cancelar"),
-          ),
-          TextButton(
-            onPressed: () {
-              // Obtiene la cantidad ingresada
-              double ingredientQuantity = double.tryParse(_ingredientQuantityController.text) ?? 0;
-              if(_selectedUnit == 'g'){
-                ingredientQuantity = ingredientQuantity / 1000;
-              }
-              if (ingredientQuantity > 0 && _selectedUnit != null && ingredientQuantity  <= ingredient.quantityInInventory) {
-                ingredientsController.filteredIngredients[index].quantityInInventory = ingredient.quantityInInventory - ingredientQuantity;  // Restamos la cantidad
-                double quantityToStore = ingredientQuantity;
-
-
-                // Convertir gramos a kilogramos si la unidad seleccionada es gramos
-                if (_selectedUnit == 'g') {
-                  quantityToStore = ingredientQuantity / 1000; // Conversión de g a kg
-                }
-                setState(() {
-                  ingredient.quantityUsed = quantityToStore; // Almacena la cantidad en kg
-                 // Guarda la unidad seleccionada
-                  selectedIngredients.add(ingredient); // Agrega el ingrediente a la lista
-                });
-                  Get.snackbar("Mensaje", "${ingredient.name} agregado con cantidad: ${quantityToStore.toStringAsFixed(2)} kg");
-                Navigator.of(context).pop(); // Cierra el diálogo de cantidad
-              } else {
-                Get.snackbar("Error", "Por favor, ingresa una cantidad válida y selecciona una unidad");}
-            },
-            child: const Text("Agregar"),
-          ),
-        ],
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
 
 
