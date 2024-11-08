@@ -28,7 +28,7 @@ class InvoicesPageView extends StatelessWidget {
           children: [
             Center(child: SalesInvoiceView()),
             
-            Center(child: SalesInvoiceView()),
+            Center(child: Text("Facturas de comprar")),
 
           ],
         ),

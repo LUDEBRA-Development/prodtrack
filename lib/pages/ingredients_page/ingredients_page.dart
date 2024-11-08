@@ -30,22 +30,10 @@ class _IngredientPageState extends State<IngredientsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFdcdcdc),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70.0),
-        child: AppBar(
-          backgroundColor: const Color(0xFFdcdcdc),
-          title: const Center(
-            child: Text(
-              "Ingredientes",
-              style: TextStyle(color: Colors.black, fontSize: 34),
-            ),
-          ),
-        ),
-      ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+          Container(
+            padding: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
             child: searchBar(),
           ),
           Center(

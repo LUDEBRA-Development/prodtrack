@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:prodtrack/pages/index_pages.dart';
-
 import 'firebase_options.dart';
 
 void main() async {
@@ -14,7 +14,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Ahora que Firebase está inicializado, puedes ejecutar la aplicación.
   runApp(const MyApp());
 }
 
@@ -23,13 +22,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: "Mi aplicación",
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: indexPages(), // La página principal de tu aplicación.
+    return ScreenUtilInit(
+      designSize: const Size(375, 812), // Define el tamaño base de diseño (ajústalo a tus necesidades)
+      minTextAdapt: true,
+      builder: (context, child) {
+        return GetMaterialApp(
+          title: "Mi aplicación",
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: indexPages(), // La página principal de tu aplicación.
+        );
+      },
     );
   }
 }

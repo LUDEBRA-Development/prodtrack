@@ -50,6 +50,7 @@ dependencies:
   pdf: 
   printing:
   fl_chart:
+  flutter_screenutil:
 dev_dependencies:
   flutter_test:
     sdk: flutter

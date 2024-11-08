@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prodtrack/pages/ingredients_page/ingredients_page.dart';
+import 'package:prodtrack/pages/ingredients_page/ingredient_index_page.dart';
 import 'package:prodtrack/pages/invoices_page/invoices_page.dart';
 import 'package:prodtrack/pages/login_page.dart';
 import 'package:prodtrack/pages/product_page/product_page.dart';
@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                                   'INGREDIENTES',
                                   Icons.filter_alt,
                                   Colors.green,
-                                  IngredientsPage(),
+                                  IngredientIndexPage(),
                                 ),
                               ],
                             ),
