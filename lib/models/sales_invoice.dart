@@ -13,7 +13,7 @@ class SalesInvoice {
     required this.date,
     required this.products,
   }) : totalInvoice = products.fold(
-          0, (sum, product) => sum + product.boxPrice,
+          0, (sum, product) => sum + (product.boxPrice * product.quantity),
         );
 
   // Convert invoice to map for Firebase

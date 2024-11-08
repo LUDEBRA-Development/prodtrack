@@ -47,7 +47,9 @@ dependencies:
   uuid: 
   path_provider:
   file:
-  
+  pdf: 
+  printing:
+  fl_chart:
 dev_dependencies:
   flutter_test:
     sdk: flutter

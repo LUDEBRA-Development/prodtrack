@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:prodtrack/pages/report_pages/account_payable/accounts_payable.dart';
 import 'package:prodtrack/pages/report_pages/price_product/price_product_report.dart';
+import 'package:prodtrack/pages/report_pages/sales/sales_chart.dart';
+import 'package:get/get.dart';
+import 'package:prodtrack/controllers/sales_invoices_controller.dart';
 
 class ReportPage extends StatelessWidget {
+     final SalesInvoiceController salesInvoiceController = Get.put(SalesInvoiceController());
+  
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -25,15 +30,15 @@ class ReportPage extends StatelessWidget {
             ),
           ),
         ),
-        body: const TabBarView(
+        body:  TabBarView(
           children: [
-            Center(child: AccountsPayableView()),
+            const Center(child: AccountsPayableView()),
 
-            Center(child: Text('Informe de los gastos')),
+            const Center(child: Text('Informe de los gastos')),
             
-            Center(child: PriceProductReport()),
+            const Center(child: PriceProductReport()),
 
-            Center(child: Text('Informe de las ventas')),
+            Center(child: SalesChart()),
           ],
         ),
       ),

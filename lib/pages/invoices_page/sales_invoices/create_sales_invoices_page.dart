@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:prodtrack/controllers/sales_invoices_controller.dart';
 import 'package:prodtrack/models/product.dart';
 import 'package:prodtrack/models/sales_invoice.dart';
-import 'package:intl/intl.dart';
+import 'package:prodtrack/widgets/format_with_commas.dart';
 class CreateSalesInvoicesPage extends StatefulWidget {
   const CreateSalesInvoicesPage({super.key});
 
@@ -48,7 +48,7 @@ class _CreateSalesInvoicesPageState extends State<CreateSalesInvoicesPage> {
                 salesInvoiceController.addSalesInvoice(invoice);
                 Navigator.of(context).pop(); // Volver a la vista anterior
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Factura creada")),
+                  const SnackBar(content: Text("Factura creada")),
                 );
               },
             ),
@@ -92,8 +92,8 @@ class _CreateSalesInvoicesPageState extends State<CreateSalesInvoicesPage> {
               color: Color.fromARGB(255, 33, 243, 79), // Puedes elegir el color que desees
             ),
           ),
-          Text(": \$${formatoConComas(totalInvoice)}",
-            style: TextStyle(
+          Text(": \$${formatWithCommas(totalInvoice)}",
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -159,7 +159,7 @@ class _CreateSalesInvoicesPageState extends State<CreateSalesInvoicesPage> {
                         children: [
                           const Icon(Icons.attach_money, size: 16),
                           Text(
-                            "Precio: \$${formatoConComas(item.boxPrice)}",
+                            "Precio: \$${formatWithCommas(item.boxPrice)}",
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors.green,
@@ -186,7 +186,7 @@ class _CreateSalesInvoicesPageState extends State<CreateSalesInvoicesPage> {
                         children: [
                           const Icon(Icons.payment, size: 16),
                           Text(
-                            "Total: \$${formatoConComas((item.quantity * item.boxPrice).toDouble())}",
+                            "Total: \$${formatWithCommas((item.quantity * item.boxPrice).toDouble())}",
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors.blue,
@@ -242,11 +242,6 @@ class _CreateSalesInvoicesPageState extends State<CreateSalesInvoicesPage> {
     );
   }
 
-
-  String formatoConComas(double numero) {
-    final formatter = NumberFormat("#,###"); 
-    return formatter.format(numero);
-  }
 
   void _showSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(

@@ -14,24 +14,34 @@ class SalesInvoiceController extends GetxController {
   // Estado de carga
   RxBool isLoading = false.obs;
 
+  RxMap<DateTime, double> salesData = <DateTime, double>{}.obs; 
+
   @override
   void onInit() {
     super.onInit();
-    fetchSalesInvoices();  // Cargar facturas al inicializar el controlador
+    fetchSalesInvoices();
   }
 
   // Obtener todas las facturas del servicio y actualizar las listas observables
-  void fetchSalesInvoices() async {
-    try {
-      isLoading.value = true;
-      salesInvoices.value = await _salesInvoiceService.getAllSalesInvoices();
-      filteredSalesInvoices.value = salesInvoices; // Mostrar todas las facturas al inicio
-    } catch (e) {
-      Get.snackbar('Error', 'No se pudieron cargar las facturas');
-    } finally {
-      isLoading.value = false;
+void fetchSalesInvoices() async {
+  try {
+    isLoading.value = true;
+    salesInvoices.value = await _salesInvoiceService.getAllSalesInvoices();
+
+    // Imprime la lista de facturas para verificar
+    print("Facturas obtenidas:");
+    for (var invoice in salesInvoices) {
+      print("ID: ${invoice.id}, Cliente: ${invoice.customer}, Monto: ${invoice.totalInvoice}");
     }
+
+    filteredSalesInvoices.value = salesInvoices; // Mostrar todas las facturas al inicio
+    calculateSalesByDate(); 
+  } catch (e) {
+    Get.snackbar('Error', 'No se pudieron cargar las facturas');
+  } finally {
+    isLoading.value = false;
   }
+}
 
   // Filtrar facturas por cliente
   void filterSalesInvoices(String query) {
@@ -75,5 +85,22 @@ class SalesInvoiceController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'No se pudo eliminar la factura');
     }
+  }
+
+  void calculateSalesByDate() {
+    Map<DateTime, double> calculatedData = {};
+    
+    for (var invoice in filteredSalesInvoices) {
+      final date = invoice.date;  // Suponiendo que 'date' es un campo de SalesInvoice
+      final total = invoice.totalInvoice;  // Suponiendo que 'totalInvoice' es el monto total de la factura
+      print("Total" + total.toString());
+      if (calculatedData.containsKey(date)) {
+        calculatedData[date] = calculatedData[date]! + total;
+      } else {
+        calculatedData[date] = total;
+      }
+    }
+    
+    salesData.value = calculatedData;  // Actualiza el salesData reactivo
   }
 }

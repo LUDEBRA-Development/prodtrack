@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prodtrack/controllers/sales_invoices_controller.dart';
 import 'package:prodtrack/pages/invoices_page/sales_invoices/create_sales_invoices_page.dart';
+import 'package:prodtrack/pages/invoices_page/sales_invoices/modify_sales_page.dart';
 import 'package:prodtrack/widgets/seach.dart';
 
 class SalesInvoiceView extends StatefulWidget {
@@ -51,7 +52,7 @@ class _SalesInvoiceViewState extends State<SalesInvoiceView> {
                       padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
                       child: ListTile(
                         onTap: () {
-                         /*  Get.to(() => ModifySalesInvoiceView(salesInvoice: salesInvoice)); */
+                          Get.to(() => ModifySalesInvoiceView(salesInvoice: salesInvoice));
                         },
                         title: Text(
                           salesInvoice.customer,
@@ -98,7 +99,7 @@ class _SalesInvoiceViewState extends State<SalesInvoiceView> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 68, 109, 199),
+                color: const  Color(0xFFec1074),
                 borderRadius: BorderRadius.circular(20.0),
               ),
               child: const Icon(
