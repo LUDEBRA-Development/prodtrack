@@ -27,14 +27,8 @@ void fetchSalesInvoices() async {
   try {
     isLoading.value = true;
     salesInvoices.value = await _salesInvoiceService.getAllSalesInvoices();
-
-    // Imprime la lista de facturas para verificar
-    print("Facturas obtenidas:");
-    for (var invoice in salesInvoices) {
-      print("ID: ${invoice.id}, Cliente: ${invoice.customer}, Monto: ${invoice.totalInvoice}");
-    }
-
-    filteredSalesInvoices.value = salesInvoices; // Mostrar todas las facturas al inicio
+    salesInvoices.sort((a, b) => a.customer.compareTo(b.customer));
+    filteredSalesInvoices.value = salesInvoices; 
     calculateSalesByDate(); 
   } catch (e) {
     Get.snackbar('Error', 'No se pudieron cargar las facturas');

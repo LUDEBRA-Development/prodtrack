@@ -7,12 +7,11 @@ import 'package:prodtrack/models/account_payable.dart';
 import 'package:prodtrack/models/employee.dart';
 import 'package:prodtrack/models/product.dart';
 import 'package:prodtrack/pages/index_pages.dart';
-import 'package:prodtrack/pages/product_page/product_page.dart';
 import 'package:prodtrack/widgets/seach.dart';
 
 class UpdateInventoryPage extends StatefulWidget {
-  final Product product;
-  const UpdateInventoryPage({super.key, required this.product});
+  RxList<Product> selectedProducts;
+  UpdateInventoryPage({super.key, required this.selectedProducts});
 
   @override
   State<UpdateInventoryPage> createState() => _UpdateInventoryPageState();
@@ -20,12 +19,13 @@ class UpdateInventoryPage extends StatefulWidget {
 
 class _UpdateInventoryPageState extends State<UpdateInventoryPage> {
   final EmployeeController employeeController = Get.put(EmployeeController());
-  final ProductController productController = Get.put(ProductController());
   final AccountPayableController accountPayableController = Get.put(AccountPayableController());
+  final ProductController productController = Get.put(ProductController());
   
   final TextEditingController _searchController = TextEditingController();
-  final TextEditingController amountControllerr = TextEditingController();
-  List<Employee> _employeesSelected = [];
+  
+  final List<Employee> _employeesSelected = [];
+  Map<String?, TextEditingController> amountControllers = {};
   bool _isLoading = false;
   @override
   void initState() {
@@ -59,23 +59,59 @@ class _UpdateInventoryPageState extends State<UpdateInventoryPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: TextField(
-              controller: amountControllerr,
-              decoration: InputDecoration(
-                hintText: "Cantidad de cajas fabricadas",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black),
-                ),
-                filled: true,
-                fillColor: const Color(0xFFcbcbcb),
-                prefixIcon: const Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Icon(Icons.confirmation_number, color: Colors.black),
-                ),
-              ),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Obx(() {
+                return ListView.builder(
+                  itemCount: widget.selectedProducts.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final product = widget.selectedProducts[index];
+                    
+                    if (!amountControllers.containsKey(product.id ?? '')) {
+                      // Si no hay un TextEditingController para el producto, se crea uno
+                      amountControllers[product.id] = TextEditingController();
+                    }
+                    // Obtener el controller correspondiente para el producto actual
+                    TextEditingController amountController = amountControllers[product.id]!;
+              
+                    return Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${product.name} ',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          TextField(
+                            controller: amountController,
+                            decoration: InputDecoration(
+                              hintText: "Cantidad de cajas fabricadas",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide: const BorderSide(color: Colors.black),
+                              ),
+                              filled: true,
+                              fillColor: const Color(0xFFcbcbcb),
+                              prefixIcon: const Padding(
+                                padding: EdgeInsets.all(12.0),
+                                child: Icon(Icons.confirmation_number, color: Colors.black),
+                              ),
+                            ),
+                            keyboardType: TextInputType.number, // Para que el teclado sea numérico
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                );
+              }),
             ),
           ),
           Container(
@@ -83,6 +119,7 @@ class _UpdateInventoryPageState extends State<UpdateInventoryPage> {
             child: searchBar(_searchController, "Buscar empleados"),
           ),
           Expanded(
+            flex: 3,
             child: Padding(
               padding: const EdgeInsets.only(left: 40.0, right: 40.0),
               child: Obx(() {
@@ -128,6 +165,7 @@ class _UpdateInventoryPageState extends State<UpdateInventoryPage> {
             ),
           ),
         _buildUpdateButton(),
+        
         ],
       ),
     );
@@ -204,57 +242,91 @@ Widget _buildUpdateButton() {
                   ),
                   
                 ),
-                onPressed: () async {
-                  if (_employeesSelected.isEmpty) {
-                    _showSnackBar(context, "Por favor, seleccione al menos un empleado.");
-                    return;
-                  }
-                  
-                  if (amountControllerr.text.isEmpty) {
-                    _showSnackBar(context, "Por favor, ingrese la cantidad de producto.");
-                    return;
-                  }
-
-                  int? quantityNew = int.tryParse(amountControllerr.text);
-                  if (quantityNew == null) {
-                    _showSnackBar(context, "Cantidad no válida. Ingrese un número entero.");
-                    return;
-                  }
-
+                onPressed: _isLoading ?
+                null
+                : () async {
                   setState(() {
                     _isLoading = true;
                   });
-
+                  
                   try {
+                    List<int> quantitys = []; 
+                    if (_employeesSelected.isEmpty) {
+                      _showSnackBar(context, "Por favor, seleccione al menos un empleado.");
+                      return;
+                    }
+                    
+                    if (amountControllers.isEmpty) {
+                      _showSnackBar(context, "Por favor, ingrese la cantidad de los  productos.");
+                      return;
+                    }
+                    bool isValid = true;
+                    for (int i = 0; i < widget.selectedProducts.length; i++) {
+                      final controller = amountControllers[widget.selectedProducts[i].id];
+
+                      if (controller != null) {
+                        int quantityNew = int.parse(controller.text);
+                        quantitys.add(quantityNew);  
+                        
+                      } else {
+                        isValid = false;
+                        break;
+                      }
+                    }
+                    if (!isValid) {
+                      _showSnackBar(context, "Cantidad no válida. Ingrese un número entero.");
+                      return;
+                    }
+
+
+                    bool status =  false;
                     const double priceLabour = 800;
-                    double amount = (quantityNew * priceLabour) / _employeesSelected.length;
+                    double amount = 0;
 
-                    AccountPayable accountPayable = AccountPayable(
-                      beneficiary: _employeesSelected[0],
-                      dueDate: DateTime.now().add(const Duration(days: 30)),
-                      amount: amount,
-                    );
 
-                    await productController.updateQuantity(context, widget.product, quantityNew);
-                    await accountPayableController.addAccountPayable(accountPayable);
+                    for (int i = 0; i < widget.selectedProducts.length; i++) {
+                      var product = widget.selectedProducts[i];
+                      int quantityNew = quantitys[i];
+                      amount =  (quantityNew * priceLabour) / _employeesSelected.length;
 
+                      status = await productController.updateQuantity(product, quantityNew);
+                      if (status) {
+                        for (int i = 0; i < _employeesSelected.length; i++) {
+                          AccountPayable accountPayable = AccountPayable(
+                            beneficiary: _employeesSelected[i],
+                            dueDate: DateTime.now().add(const Duration(days: 30)),
+                            amount: amount,
+                          );
+                          await accountPayableController.addAccountPayable(accountPayable);
+                        } 
+                      }
+                    } 
+                    productController.clearSelection();
                     Get.offAll(() => const indexPages());
 
                   } catch (e) {
-                    _showSnackBar(context, "Ocurrió un error. Inténtelo nuevamente.");
-
+                    Get.snackbar("Error", "Próximamente, ocurrio un error intente nuevamnte");
                   } finally {
                     setState(() {
                       _isLoading = false;
                     });
                   }
                 },
-                child: const Text("Guardar", style: 
-                TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                )
+                child: _isLoading 
+                ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      
+                      strokeWidth: 2.0,
+                    ),
+                  )
+                : const Text("Guardar", style: 
+                  TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  )
                 ,),
               ),
             ),

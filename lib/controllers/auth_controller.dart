@@ -43,7 +43,7 @@ class AuthController extends GetxController {
 
         // Guardar las credenciales localmente incluyendo todos los datos adicionales.
         await _saveCredentials(email, password, name, lastName, id);
-        Get.offAll(() => indexPages()); // Redirigir a la página de inicio.
+        Get.offAll(() => const indexPages()); // Redirigir a la página de inicio.
       } else {
         Get.snackbar("Error", "No se pudo registrar el usuario");
       }

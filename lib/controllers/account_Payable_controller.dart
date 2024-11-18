@@ -24,6 +24,7 @@ class AccountPayableController extends GetxController {
     try {
       isLoading.value = true;
       accountsPayable.value = await accountPayableService.getAllAccountPayables();
+      accountsPayable.sort((a, b) => a.beneficiary.name.compareTo(b.beneficiary.name));
       filteredAccountsPayable.value = accountsPayable;
     } catch (e) {
       Get.snackbar('Error', 'No se pudieron cargar las cuentas por pagar');
@@ -55,6 +56,8 @@ class AccountPayableController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'No se pudo agregar la cuenta por pagar');
     }
+    fetchAccountsPayable();
+
   }
 
   // Actualizar una cuenta por pagar
@@ -69,6 +72,7 @@ class AccountPayableController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'No se pudo actualizar la cuenta por pagar');
     }
+    fetchAccountsPayable();
   }
 
   // Eliminar una cuenta por pagar
@@ -80,6 +84,7 @@ class AccountPayableController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'No se pudo eliminar la cuenta por pagar');
     }
+    fetchAccountsPayable();
   }
 
 void filterAccountsPayableForStatus(String query, {String? status}) {

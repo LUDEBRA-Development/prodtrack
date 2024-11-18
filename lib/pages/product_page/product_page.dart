@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prodtrack/controllers/product_controller.dart';
+import 'package:prodtrack/models/product.dart';
 import 'package:prodtrack/pages/product_page/add_product_page.dart';
 import 'package:prodtrack/pages/product_page/modifify_product_page.dart';
+import 'package:prodtrack/pages/product_page/update_inventory_page.dart';
+import 'package:prodtrack/widgets/avatar.dart';
 import 'package:prodtrack/widgets/seach.dart';
 
 class ProductView extends StatefulWidget {
@@ -15,7 +18,7 @@ class ProductView extends StatefulWidget {
 class _ProductViewState extends State<ProductView> {
   final ProductController productController = Get.put(ProductController()); // Controlador
   final TextEditingController _searchController = TextEditingController();
-
+  List<Product> productSelectedColor = [];
   @override
   void initState() {
     super.initState();
@@ -29,15 +32,42 @@ class _ProductViewState extends State<ProductView> {
     return Scaffold(
       backgroundColor: const Color(0xFFdcdcdc),
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70.0),
+        preferredSize: const Size.fromHeight(50.0),
         child: AppBar(
-          backgroundColor: const Color(0xFFdcdcdc),
-          title: const Center(
-            child: Text(
-              "Productos",
-              style: TextStyle(color: Colors.black, fontSize: 34, height: 20),
-            ),
-          ),
+          title: Obx(() {
+            final count = productController.selectedProducts.length;
+            return Text(count > 0 ? '$count ' : 'Productos', 
+            style: const TextStyle(color: Colors.black, fontSize: 30, height: 20));
+          }),
+          actions: [
+            Obx(() {
+              if (productController.selectedProducts.isEmpty) {
+                return Container(); // No mostrar acciones si no hay selección
+              }
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () {   
+                    Get.to(()=>  UpdateInventoryPage(selectedProducts : productController.selectedProducts));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const  Color(0xFFec1074),
+                    minimumSize: const Size(250, 40),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  child: const Text("Actulizar inventario", style: 
+                    TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    )
+                  ,),
+                ),
+              );
+            }),
+          ],
         ),
       ),
       body: Column(
@@ -45,7 +75,7 @@ class _ProductViewState extends State<ProductView> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: const EdgeInsets.only(left: 40.0, right: 40.0),
+            padding: const EdgeInsets.only(left: 40.0, right: 40.0, top: 8.0),
             child: searchBar(_searchController, "Buscar productos"),
           ),
           Padding(
@@ -60,24 +90,52 @@ class _ProductViewState extends State<ProductView> {
                   itemCount: productController.filteredProducts.length,
                   itemBuilder: (BuildContext context, int index) {
                     final product = productController.filteredProducts[index];
+                    final isSelected = productController.selectedProducts.contains(product);
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
                       child: ListTile(
-                        onTap: () {
-                          Get.to(() => ModifyProductView(product: product));
+                        onTap: () {   
+                          setState(() {
+                            if (productController.isSelectionMode) {
+                              productController.toggleSelection(product);
+                            } else {
+                              // Si no está en modo selección, navega a modificar
+                              Get.to(() => ModifyProductView(product: product));
+                            }                            
+                          });
                         },
+                        onLongPress: () {
+                          setState(() {
+/*                             if (!productSelectedColor.contains(product)) {
+                              productSelectedColor.add(product);
+                            }else {
+                              productSelectedColor.remove(product);
+                            } */
+                            productController.toggleSelection(product);   
+                          });
+                        },
+                        selected: isSelected,
+                        selectedTileColor: Colors.blue.withOpacity(0.2),
                         title: Text(
                           '${product.name} - \$${product.boxPrice.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 20),
+                          style: TextStyle(
+                            color: isSelected ? Colors.blue : Colors.black,
+                            fontSize: 20,
+                          ),
                         ),
                         subtitle: Text('Cantidad: ${product.quantity}'),
                         leading: avatar(product.name),
-                        trailing: const Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.black,
-                          size: 20,
-                        ),
+                        trailing: productController.selectedProducts.contains(product)
+                            ? const Icon(
+                                Icons.check_circle,
+                                color: Colors.blue,
+                                size: 24,
+                              )
+                            : const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.black,
+                                size: 20,
+                              ),
                       ),
                     );
                   },
@@ -121,40 +179,6 @@ class _ProductViewState extends State<ProductView> {
     );
   }
 
-  Widget avatar(String name) {
-    List<String> colors = [
-      "F56217",
-      "F5CC17",
-      "00875E",
-      "04394E",
-      "9C27B0",
-      "E91E63",
-      "3F51B5",
-      "4CAF50",
-    ];
 
-    Color getColorFromHex(String hexColor) {
-      final hexCode = hexColor.replaceAll("#", "");
-      return Color(int.parse("FF$hexCode", radix: 16));
-    }
-
-    // Obtener la letra inicial y convertirla a mayúscula
-    String firstLetter = name.isNotEmpty ? name[0].toUpperCase() : 'P';
-
-    // Calcular el índice basado en la letra inicial (A=0, B=1, ..., Z=25)
-    int colorIndex =
-        (firstLetter.codeUnitAt(0) - 'A'.codeUnitAt(0)) % colors.length;
-
-    return CircleAvatar(
-      backgroundColor: getColorFromHex(colors[colorIndex]),
-      radius: 30,
-      child: Text(
-        firstLetter,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 32,
-        ),
-      ),
-    );
-  }
 }
+

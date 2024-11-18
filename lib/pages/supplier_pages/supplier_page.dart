@@ -4,6 +4,7 @@ import 'package:prodtrack/controllers/supplier_controller.dart';
 import 'package:prodtrack/models/Supplier.dart';
 import 'package:prodtrack/pages/supplier_pages/add_supplier_page.dart';
 import 'package:prodtrack/pages/supplier_pages/modifi_supplier_page.dart';
+import 'package:prodtrack/widgets/avatar.dart';
 import 'package:prodtrack/widgets/seach.dart';
 
 class SupplierView extends StatefulWidget {
@@ -129,42 +130,7 @@ class _SupplierViewState extends State<SupplierView> {
     );
   }
 
-  Widget avatar(String name) {
-    List<String> colors = [
-      "F56217",
-      "F5CC17",
-      "00875E",
-      "04394E",
-      "9C27B0",
-      "E91E63",
-      "3F51B5",
-      "4CAF50",
-    ];
 
-    Color getColorFromHex(String hexColor) {
-      final hexCode = hexColor.replaceAll("#", "");
-      return Color(int.parse("FF$hexCode", radix: 16));
-    }
-
-    // Obtener la letra inicial y convertirla a mayúscula
-    String firstLetter = name.isNotEmpty ? name[0].toUpperCase() : 'A';
-
-    // Calcular el índice basado en la letra inicial (A=0, B=1, ..., Z=25)
-    int colorIndex =
-        (firstLetter.codeUnitAt(0) - 'A'.codeUnitAt(0)) % colors.length;
-
-    return CircleAvatar(
-      backgroundColor: getColorFromHex(colors[colorIndex]),
-      radius: 30,
-      child: Text(
-        firstLetter,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 32,
-        ),
-      ),
-    );
-  }
 
   void printSupplier(Supplier supplier) {
     ScaffoldMessenger.of(context).showSnackBar(

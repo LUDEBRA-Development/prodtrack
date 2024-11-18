@@ -25,6 +25,7 @@ class SupplierController extends GetxController {
     try {
       isLoading.value = true;
       suppliers.value = await _supplierService.getAllSuppliers();
+      suppliers.sort((a, b)=> b.name.compareTo(a.name));
       filteredSuppliers.value = suppliers; // Mostrar todos los proveedores al inicio
     } catch (e) {
       Get.snackbar('Error', 'No se pudieron cargar los proveedores');

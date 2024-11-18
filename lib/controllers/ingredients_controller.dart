@@ -41,8 +41,8 @@ class IngredientsController extends GetxController {
     //   isLoading.value = false;
     // }
 
-    ingredients.value = await _ingredientService
-        .getAllIngredients(); // Obtener todos los ingredientes
+    ingredients.value = await _ingredientService .getAllIngredients(); // Obtener todos los ingredientes
+    ingredients.sort((a, b) => a.name.compareTo(b.name));
     filteredIngredients.value = ingredients; // Actualizar la lista filtrada
   }
 

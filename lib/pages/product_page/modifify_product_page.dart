@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:prodtrack/controllers/employee_contoller.dart';
 import 'dart:io';
 import 'package:get/get.dart';
+import 'package:prodtrack/controllers/product_controller.dart';
 import 'package:prodtrack/models/product.dart';
 import 'package:prodtrack/pages/product_page/update_inventory_page.dart';
 
@@ -19,6 +20,7 @@ class _ModifyProductViewState extends State<ModifyProductView> {
   
 
   final EmployeeController employeeController = Get.put(EmployeeController());
+  final ProductController productController = Get.put(ProductController());
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -179,13 +181,9 @@ Widget _buildTextField(bool status, TextEditingController controller, String hin
                   child: const Text("Cancelar"),
                 ),
                 TextButton(
-                  onPressed: () {
-                    // Lógica para eliminar el producto
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("${widget.product.name} eliminado")),
-                    );
+                  onPressed: () async {
+                    await productController.deteleteProduct(widget.product.id.toString()); 
+                    Get.snackbar("Mensaje", "${widget.product.name} eliminado");
                   },
                   child: const Text("Eliminar"),
                 ),
@@ -245,7 +243,10 @@ Widget _buildTextField(bool status, TextEditingController controller, String hin
                 double.parse(_priceLabelController.text),
                 double.parse(_priceLabeledController.text),
               );
-              Get.to(()=> UpdateInventoryPage(product: updatedProduct));
+              RxList<Product> selectedProductsCopy = <Product>[].obs;
+              selectedProductsCopy.add(updatedProduct);  
+                            
+              Get.to(()=>  UpdateInventoryPage(selectedProducts : selectedProductsCopy));
             },
           ),         
         ),
