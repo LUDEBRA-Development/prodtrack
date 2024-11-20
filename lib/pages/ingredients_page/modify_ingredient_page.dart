@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prodtrack/controllers/ingredients_controller.dart';
-import 'package:prodtrack/controllers/supplier_controller.dart';
-import 'package:prodtrack/models/Ingredient.dart';
-import 'package:prodtrack/models/Supplier.dart';
+import 'package:prodtrack/models/Ingredient.dart';  
 import 'dart:io';
 
 class ModifyIngredientView extends StatefulWidget {

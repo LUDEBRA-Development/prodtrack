@@ -59,8 +59,7 @@ class _IngredientPageState extends State<IngredientsPage> {
                     ),
                     itemCount: ingredientController.filteredIngredients.length,
                     itemBuilder: (BuildContext context, int index) {
-                      final ingredient =
-                          ingredientController.filteredIngredients[index];
+                      final ingredient = ingredientController.filteredIngredients[index];
                       return ingredientCard(ingredient);
                     },
                   );
