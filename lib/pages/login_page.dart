@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prodtrack/pages/register_page.dart';
+import 'package:prodtrack/widgets/text_editing_controller.dart';
 import '../controllers/auth_controller.dart';
 
 class LoginPage extends StatelessWidget {
@@ -18,15 +19,15 @@ class LoginPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 // Logo de la app como imagen completa (no ovalada)
                 Image.asset(
                   'assets/images/iconoProdTrack-removebg-preview.png',
                   height: 120, // Ajusta el tamaño del logo como necesites
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 // Texto del nombre de la app
-                Text(
+                const Text(
                   'PODTRACK',
                   style: TextStyle(
                     fontSize: 35,
@@ -34,9 +35,9 @@ class LoginPage extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 // Texto "Iniciar sesión"
-                Text(
+                const Text(
                   'Iniciar sesión',
                   style: TextStyle(
                     fontSize: 22,
@@ -44,26 +45,32 @@ class LoginPage extends StatelessWidget {
                     color: Colors.blue,
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 // Campo de correo
-                _buildTextField(context, 'Correo', _emailController),
-                SizedBox(height: 20),
+                CustomTextField(
+                  hintText: 'Correo',
+                  controller: _emailController,
+                ),
+                const SizedBox(height: 20),
                 // Campo de contraseña
-                _buildTextField(context, 'Contraseña', _passwordController,
-                    obscureText: true),
-                SizedBox(height: 40),
+                CustomTextField(
+                  hintText: 'Contraseña',
+                  controller: _passwordController,
+                  isPassword: true,
+                ),
+                const SizedBox(height: 40),
                 // Botón de inicio de sesión
                 Obx(() => _authController.isLoading.value
-                    ? Center(child: CircularProgressIndicator())
+                    ? const Center(child: CircularProgressIndicator())
                     : _buildLoginButton(context)),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 // Texto para redirigir a registro
                 Center(
                   child: GestureDetector(
                     onTap: () =>
                         Get.to(() => RegisterPage()), // Redirige a registro
                     child: RichText(
-                      text: TextSpan(
+                      text: const TextSpan(
                         style: TextStyle(color: Colors.black),
                         children: [
                           TextSpan(text: '¿No estás registrado? '),
@@ -84,28 +91,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(
-      BuildContext context, String hintText, TextEditingController controller,
-      {bool obscureText = false}) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      style: TextStyle(color: Colors.black),
-      decoration: InputDecoration(
-        labelText: hintText,
-        labelStyle: TextStyle(color: Colors.grey),
-        filled: true,
-        fillColor: Colors.white.withOpacity(0.9),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
-          borderRadius: BorderRadius.circular(30),
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildLoginButton(BuildContext context) {
     return Center(
@@ -113,7 +99,7 @@ class LoginPage extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 16),
+            padding: const  EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ),
@@ -125,7 +111,7 @@ class LoginPage extends StatelessWidget {
 
             _authController.login(email, password);
           },
-          child: Text(
+          child: const  Text(
             'Iniciar Sesión',
             style: TextStyle(
               fontSize: 18,
