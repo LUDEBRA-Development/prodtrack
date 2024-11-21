@@ -53,10 +53,11 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_launcher_icons: "^0.14.1"
 
-flutter_icons: 
+flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/icono_prodtrack_preview.png"
+  image_path: "assets/images/iconoProdTrack-removebg-preview.png"
+
 
 
 
