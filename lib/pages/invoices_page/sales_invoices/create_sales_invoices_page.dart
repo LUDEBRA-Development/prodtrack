@@ -189,7 +189,7 @@ class _CreateSalesInvoicesPageState extends State<CreateSalesInvoicesPage> {
                             "Total: \$${formatWithCommas((item.quantity * item.boxPrice).toDouble())}",
                             style: const TextStyle(
                               fontSize: 16,
-                              color: Colors.blue,
+                              color: Color.fromRGBO(33, 150, 243, 1),
                               fontWeight: FontWeight.bold,
                             ),
                           ),

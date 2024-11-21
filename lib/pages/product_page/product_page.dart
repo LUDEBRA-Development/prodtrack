@@ -51,7 +51,7 @@ class _ProductViewState extends State<ProductView> {
                     Get.to(()=>  UpdateInventoryPage(selectedProducts : productController.selectedProducts));
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const  Color(0xFFec1074),
+                    backgroundColor: const Color.fromRGBO(33, 150, 243, 1),
                     minimumSize: const Size(250, 40),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),

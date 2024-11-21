@@ -4,7 +4,7 @@ import 'package:prodtrack/controllers/supplier_controller.dart';
 import 'package:prodtrack/models/Supplier.dart';
 import 'package:prodtrack/pages/supplier_pages/add_supplier_page.dart';
 import 'package:prodtrack/pages/supplier_pages/modifi_supplier_page.dart';
-import 'package:prodtrack/widgets/avatar.dart';
+import 'package:prodtrack/widgets/image_profile.dart';
 import 'package:prodtrack/widgets/seach.dart';
 
 class SupplierView extends StatefulWidget {
@@ -138,25 +138,5 @@ class _SupplierViewState extends State<SupplierView> {
     );
   }
 
-    Widget imageProfile(Supplier supplier) {
-    return Image.network(
-       supplier.urlProfilePhoto.toString(),
-       loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-         if (loadingProgress == null) {
-           return child;
-         } else {
-           return Center(
-             child: CircularProgressIndicator(
-               value: loadingProgress.expectedTotalBytes != null
-                   ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
-                   : null,
-             ),
-           );
-         }
-       },
-       errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-         return avatar(supplier.urlProfilePhoto.toString());
-       },
-     );
-  }
+
 }

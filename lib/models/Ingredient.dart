@@ -8,7 +8,7 @@ class Ingredient {
   double quantityUsed;
   double quantityInInventory;
   final double price;
-  final Supplier supplier;
+  final Supplier? supplier;
   final Und und;
 
   Ingredient(
@@ -16,7 +16,7 @@ class Ingredient {
       required this.name,
       required this.quantityUsed,
       required this.quantityInInventory,
-      required this.supplier,
+      this.supplier,
       required this.und,
       required this.price});
 
@@ -45,7 +45,7 @@ class Ingredient {
       'quantityUsed': quantityUsed,
       'quantityInInventory': quantityInInventory,
       'price': price,
-      'supplier': supplier.toMap(), // Convertir el supplier a mapa
+      'supplier': supplier?.toMap(), // Convertir el supplier a mapa
       'und': und.toMap(), // Convertir el und a mapa
     };
   }

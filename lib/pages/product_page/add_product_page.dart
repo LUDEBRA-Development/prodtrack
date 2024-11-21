@@ -11,6 +11,8 @@ import 'package:prodtrack/models/Ingredient.dart';
 import 'package:prodtrack/models/Supplier.dart';
 import 'package:prodtrack/models/Und.dart';
 import 'package:prodtrack/models/product.dart';
+import 'package:prodtrack/widgets/avatar.dart';
+import 'package:prodtrack/widgets/seach.dart';
 
 
 class CreateProductView extends StatefulWidget {
@@ -275,13 +277,9 @@ Widget _buildIngredientSection() {
                     ),
                     const SizedBox(height: 10), // Espacio entre la barra y el contenido
                     // Campo de búsqueda
-                    TextField(
-                      controller: _searchController,
-                      decoration: const InputDecoration(
-                        hintText: "Buscar insumo",
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 40.0, right: 40.0),
+                      child: searchBar(_searchController, "Buscar ingrediente"),
                     ),
                     const SizedBox(height: 10),
                     // Lista de ingredientes
@@ -297,13 +295,7 @@ Widget _buildIngredientSection() {
                                 border: Border.all(color: Colors.grey, width: 1.0),
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Expanded(
-                                    flex: 5,
-                                    child: ListTile(
+                              child: ListTile(
                                       onTap: () {
                                         _showQuantityDialog(index);
                                       },
@@ -317,15 +309,9 @@ Widget _buildIngredientSection() {
                                         style: const TextStyle(
                                             color: Colors.black, fontSize: 17.0),
                                       ),
+
+                                      leading: avatar(ingredient.name),
                                     ),
-                                  ),
-                                  Container(
-                                    height: 70,
-                                    width: 50,
-                                    child: avatar(ingredient.name),
-                                  ),
-                                ],
-                              ),
                             );
                           },
                         );
@@ -394,11 +380,6 @@ Widget _buildIngredientSection() {
                   ingredientsController.filteredIngredients[index].quantityInInventory = ingredient.quantityInInventory - ingredientQuantity;  // Restamos la cantidad
                   double quantityToStore = ingredientQuantity;
 
-
-                  // Convertir gramos a kilogramos si la unidad seleccionada es gramos
-                  if (_selectedUnit == 'g') {
-                    quantityToStore = ingredientQuantity / 1000; // Conversión de g a kg
-                  }
                   setState(() {
                     ingredient.quantityUsed = quantityToStore; // Almacena la cantidad en kg
                   // Guarda la unidad seleccionada
@@ -419,51 +400,7 @@ Widget _buildIngredientSection() {
 
 
 
-  Widget avatar(String name) {
-    List<String> colors = [
-      "F56217",
-      "F5CC17",
-      "00875E",
-      "04394E",
-      "9C27B0",
-      "E91E63",
-      "3F51B5",
-      "4CAF50",
-    ];
 
-    // Función para convertir un código hexadecimal en un color de Flutter
-    Color getColorFromHex(String hexColor) {
-      final hexCode = hexColor.replaceAll("#", "");
-      return Color(int.parse("FF$hexCode", radix: 16));
-    }
-
-    // Obtener la letra inicial y convertirla a mayúscula
-    String firstLetter = name.isNotEmpty ? name[0].toUpperCase() : 'A';
-
-    // Calcular el índice basado en la letra inicial
-    int colorIndex = (firstLetter.codeUnitAt(0) - 'A'.codeUnitAt(0)) % colors.length;
-
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            left: BorderSide(
-              color: getColorFromHex(colors[colorIndex]), // Color del borde
-              width: 2.0, // Ancho del borde
-            ),
-          ),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          firstLetter,
-          style: TextStyle(
-            color: getColorFromHex(colors[colorIndex]), // Obtener el color aquí
-            fontSize: 30,
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget listWidgetIngredientesSeleted() {
     return Column(
@@ -488,7 +425,7 @@ Widget _buildIngredientSection() {
                   ],
                 ),
                 IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
+                  icon: const  Icon(Icons.delete, color: Colors.red),
                   onPressed: () async {
                     final confirmDelete = await showDialog(
                       context: context,

@@ -36,7 +36,7 @@ class _ModifyIngredientViewState extends State<ModifyIngredientView> {
     _quantityInInventoryController.text =
         widget.ingredient.quantityInInventory.toString();
     _priceController.text = widget.ingredient.price.toString();
-    _supplierController.text = widget.ingredient.supplier.name.toString();
+    _supplierController.text = widget.ingredient.supplier?.name ?? "Desconocido";
     _undController.text = widget.ingredient.und.name.toString();
   }
 

@@ -235,7 +235,7 @@ Widget _buildUpdateButton() {
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const  Color(0xFFec1074),
+                  backgroundColor: const Color.fromRGBO(33, 150, 243, 1),
                   minimumSize: const Size(250, 40),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),

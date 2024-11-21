@@ -23,7 +23,7 @@ class _indexPagesState extends State<indexPages> {
       body: _pages[_selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: const  Color.fromARGB(255, 241, 241, 241), // Fondo detrás de la barra de navegación
-        buttonBackgroundColor: const Color(0xFFFFD400), // Fondo del botón activo
+        buttonBackgroundColor: const Color.fromRGBO(255, 212, 0, 1), // Fondo del botón activo
         color: const Color.fromARGB(255, 255, 255, 255), // Color de la barra de navegación
         animationDuration: const Duration(milliseconds: 300), // Ajuste del tiempo de animación
         animationCurve: Curves.easeInOut, // Añadir curva de animación suave
