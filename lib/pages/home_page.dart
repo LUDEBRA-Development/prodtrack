@@ -8,6 +8,7 @@ import 'package:prodtrack/pages/report_pages/account_payable/accounts_payable.da
 import 'package:prodtrack/pages/report_pages/price_product/price_product_report.dart';
 import 'package:prodtrack/services/firebase_service.dart';
 import 'package:prodtrack/pages/supplier_pages/supplier_page.dart';
+import 'package:prodtrack/controllers/user_controller.dart'; // Agregado para acceder a la foto del usuario
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,6 +19,8 @@ class _HomePageState extends State<HomePage> {
   String? userName;
   bool isLoading = true;
   final FirebaseService _firebaseService = FirebaseService();
+  final UserController userController =
+      Get.find(); // Para obtener el controlador de usuario
 
   @override
   void initState() {
@@ -121,7 +124,14 @@ class _HomePageState extends State<HomePage> {
                         CircleAvatar(
                           radius: 40,
                           backgroundColor: Colors.grey[300],
-                          child: const Icon(Icons.person, size: 50),
+                          backgroundImage:
+                              userController.user.value?.photoUrl != null
+                                  ? NetworkImage(
+                                      userController.user.value!.photoUrl!)
+                                  : null,
+                          child: userController.user.value?.photoUrl == null
+                              ? const Icon(Icons.person, size: 50)
+                              : null,
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -148,8 +158,9 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20), // Espacio entre encabezado y botones
-        
+                    const SizedBox(
+                        height: 20), // Espacio entre encabezado y botones
+
                     // Contenedor de botones con desplazamiento
                     Expanded(
                       child: SingleChildScrollView(
@@ -176,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                             const SizedBox(height: 10), // Espacio entre filas
-        
+
                             // Segunda fila de botones
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -193,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                                   'FACTURAS',
                                   Icons.receipt,
                                   Colors.red,
-                                   InvoicesPageView(),
+                                  InvoicesPageView(),
                                 ),
                               ],
                             ),
@@ -230,12 +241,12 @@ class _HomePageState extends State<HomePage> {
             children: [
               Icon(icon, size: 50, color: Colors.white),
               const SizedBox(height: 10),
-              Text(title, style: const TextStyle(color: Colors.white, fontSize: 18)),
+              Text(title,
+                  style: const TextStyle(color: Colors.white, fontSize: 18)),
             ],
           ),
         ),
       ),
     );
   }
-
 }
