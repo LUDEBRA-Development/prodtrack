@@ -24,6 +24,8 @@ class _UserEditPageState extends State<UserEditPage> {
   final TextEditingController _phoneController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
+  bool _isLoading = false;
+
 
   @override
   void initState() {
@@ -65,7 +67,10 @@ class _UserEditPageState extends State<UserEditPage> {
             _buildTextField(_phoneController, "Teléfono", Icons.phone),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _updateUser,
+              onPressed: _isLoading 
+              ? null 
+              : _updateUser,
+              
               child: const Text('Actualizar'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
@@ -135,6 +140,9 @@ class _UserEditPageState extends State<UserEditPage> {
   }
 
   void _updateUser() async {
+    setState(() {
+      _isLoading = true;
+    });
     String? profilePhotoUrl = widget.user.photoUrl;
 
     if (_image != null) {

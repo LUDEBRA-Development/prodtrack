@@ -27,6 +27,8 @@ class _ModifySupplierViewState extends State<ModifySupplierView> {
   final TextEditingController _nitController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
+  bool _isLoading = false;
+
 
   @override
   void initState() {
@@ -187,7 +189,12 @@ Widget image() {
   Widget bottomUpdate() {
     return IconButton(
       icon: const Icon(Icons.edit, color: Colors.black, size: 50),
-      onPressed: () async {
+      onPressed: _isLoading 
+      ? null 
+      : () async {
+          setState(() {
+            _isLoading = true;
+          });
         String? profilePhotoUrl = widget.supplier.urlProfilePhoto; 
         
         if (_image != null) {
@@ -207,7 +214,7 @@ Widget image() {
           urlProfilePhoto: profilePhotoUrl, 
         );
 
-       
+      
         await supplierController.updateSupplier(updatedSupplier);
 
         Navigator.of(context).pop(); 

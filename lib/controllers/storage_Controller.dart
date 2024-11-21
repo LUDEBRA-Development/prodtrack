@@ -13,6 +13,7 @@ class StorageController extends GetxController {
       }
       return imageUrl;
     } catch (e) {
+  
       Get.snackbar('Error', 'No se pudo subir la imagen');
       return null;
     }
