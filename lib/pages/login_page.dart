@@ -5,9 +5,7 @@ import '../controllers/auth_controller.dart';
 
 class LoginPage extends StatelessWidget {
   final AuthController _authController = Get.put(AuthController());
-
-  final TextEditingController _emailController =
-      TextEditingController(); //no se inicia sesion con usermane sino con email xd
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -18,33 +16,52 @@ class LoginPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 50),
-                Center(
-                  child: Text(
-                    'Iniciar Sesión',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                SizedBox(height: 30),
+                // Logo de la app como imagen completa (no ovalada)
+                Image.asset(
+                  'assets/images/iconoProdTrack-removebg-preview.png',
+                  height: 120, // Ajusta el tamaño del logo como necesites
+                ),
+                SizedBox(height: 20),
+                // Texto del nombre de la app
+                Text(
+                  'PODTRACK',
+                  style: TextStyle(
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Texto "Iniciar sesión"
+                Text(
+                  'Iniciar sesión',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.blue,
                   ),
                 ),
                 SizedBox(height: 40),
+                // Campo de correo
                 _buildTextField(context, 'Correo', _emailController),
                 SizedBox(height: 20),
+                // Campo de contraseña
                 _buildTextField(context, 'Contraseña', _passwordController,
                     obscureText: true),
                 SizedBox(height: 40),
+                // Botón de inicio de sesión
                 Obx(() => _authController.isLoading.value
                     ? Center(child: CircularProgressIndicator())
                     : _buildLoginButton(context)),
                 SizedBox(height: 20),
+                // Texto para redirigir a registro
                 Center(
                   child: GestureDetector(
-                    onTap: () => Get.to(() =>
-                        RegisterPage()), // Redirige a la página de registro
+                    onTap: () =>
+                        Get.to(() => RegisterPage()), // Redirige a registro
                     child: RichText(
                       text: TextSpan(
                         style: TextStyle(color: Colors.black),
@@ -76,23 +93,14 @@ class LoginPage extends StatelessWidget {
       style: TextStyle(color: Colors.black),
       decoration: InputDecoration(
         labelText: hintText,
-        labelStyle: TextStyle(
-          color: Colors.grey,
-          shadows: [
-            Shadow(
-              offset: Offset(1, 1),
-              blurRadius: 1.0,
-              color: Colors.black.withOpacity(0.3),
-            ),
-          ],
-        ),
+        labelStyle: TextStyle(color: Colors.grey),
         filled: true,
         fillColor: Colors.white.withOpacity(0.9),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
+          borderSide: BorderSide(color: Colors.grey),
           borderRadius: BorderRadius.circular(30),
         ),
       ),
@@ -112,23 +120,16 @@ class LoginPage extends StatelessWidget {
             backgroundColor: Colors.grey[700],
           ),
           onPressed: () {
-            String username = _emailController.text.trim();
+            String email = _emailController.text.trim();
             String password = _passwordController.text.trim();
 
-            _authController.login(username, password);
+            _authController.login(email, password);
           },
           child: Text(
             'Iniciar Sesión',
             style: TextStyle(
               fontSize: 18,
               color: Colors.white,
-              shadows: [
-                Shadow(
-                  offset: Offset(1, 1),
-                  blurRadius: 1.0,
-                  color: Colors.black.withOpacity(0.5),
-                ),
-              ],
             ),
           ),
         ),
