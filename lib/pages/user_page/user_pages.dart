@@ -16,41 +16,6 @@ class UserPage extends StatelessWidget {
           "Información del Usuario",
           style: TextStyle(color: Colors.black),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.black),
-            onPressed: () {
-              // Mostrar opciones para editar
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Opciones'),
-                  content:
-                      const Text('¿Desea editar la información del usuario?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Cerrar diálogo
-                        if (userController.user.value != null) {
-                          // Navegar a la página de edición
-                          Get.to(() =>
-                              UserEditPage(user: userController.user.value!));
-                        }
-                      },
-                      child: const Text('Editar'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Cerrar diálogo
-                      },
-                      child: const Text('Cancelar'),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -83,6 +48,19 @@ class UserPage extends StatelessWidget {
               _buildInfoField('Apellido', user.lastName),
               _buildInfoField('Email', user.email),
               _buildInfoField('Teléfono', user.phone ?? 'No disponible'),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Get.to(() => UserEditPage(user: user));
+                },
+                icon: const Icon(Icons.edit, color: Colors.white),
+                label: const Text('Editar información'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+              ),
             ],
           );
         }),
