@@ -1,5 +1,5 @@
 class Box {
-  final String id;
+  String id;
   final String name;
   final double? price;
   final int quantity;

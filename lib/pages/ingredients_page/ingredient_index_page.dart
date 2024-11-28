@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prodtrack/pages/ingredients_page/ingredients_page.dart';
-
-
+import 'package:prodtrack/pages/ingredients_page/box_page/box_page.dart'; // Importa BoxPage
 
 class IngredientIndexPage extends StatelessWidget {
   @override
@@ -9,13 +8,13 @@ class IngredientIndexPage extends StatelessWidget {
     return DefaultTabController(
       length: 3, // Número de pestañas
       child: Scaffold(
-        appBar:AppBar(
-          title:const  Text("Ingredientes"),
+        appBar: AppBar(
+          title: const Text("Ingredientes"),
           backgroundColor: Colors.white,
           bottom: const PreferredSize(
-            preferredSize: Size.fromHeight(40.0), 
+            preferredSize: Size.fromHeight(40.0),
             child: Padding(
-              padding:  EdgeInsets.only(bottom: 10.0), 
+              padding: EdgeInsets.only(bottom: 10.0),
               child: TabBar(
                 tabs: [
                   Tab(text: 'Insumos'),
@@ -26,13 +25,12 @@ class IngredientIndexPage extends StatelessWidget {
             ),
           ),
         ),
-        body:  TabBarView(
+        body: TabBarView(
           children: [
-            Center(child: IngredientsPage()),
-            
-            const Center(child: Text("Vista de envases")),
-            
-            const Center(child: Text("Vista de cajas")),
+            IngredientsPage(), // Mostrar la página de insumos
+            const Center(
+                child: Text("Vista de envases")), // Placeholder para envases
+            BoxPage(), // Mostrar la página de cajas
           ],
         ),
       ),
