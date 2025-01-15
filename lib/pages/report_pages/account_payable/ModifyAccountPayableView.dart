@@ -170,6 +170,7 @@ Widget _buildPayButton() {
       AccountPayable updatedAccount = AccountPayable(
         id: widget.account.id,
         beneficiary: widget.account.beneficiary,
+        activity:  widget.account.activity,
         amount: widget.account.amount,
         dueDate: widget.account.dueDate,
         isPaid: true, // Marcar como pagado
@@ -247,6 +248,7 @@ Widget _buildAbonarButton() {
                   id: widget.account.id,
                   beneficiary: widget.account.beneficiary,
                   amount: nuevoMonto,
+                  activity:  widget.account.activity,
                   dueDate: widget.account.dueDate,
                   isPaid: nuevoMonto <= 0, // Si el monto restante es 0, marcar como pagado
                 );

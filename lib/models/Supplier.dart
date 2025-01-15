@@ -33,6 +33,18 @@ class Supplier {
       'urlProfilePhoto': urlProfilePhoto,
     };
   }
+  Map<String, dynamic> toMapAccount() {
+    return {
+      "id" : name,
+      'name': name,
+      'phone': phone,
+      'gmail': gmail,
+      'webSite': webSite,
+      'address': address,
+      'nit': nit,
+      'urlProfilePhoto': urlProfilePhoto,
+    };
+  }
 
   // Método para crear un Supplier desde un Map
   factory Supplier.fromMap(Map<String, dynamic> map) {

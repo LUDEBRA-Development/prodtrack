@@ -45,7 +45,6 @@ class _AccountsPayableViewState extends State<AccountsPayableView> {
 
             const SizedBox(height: 10),
             filterAccountsPayableSelector(),
-            
             const SizedBox(height: 10),
             Expanded(
               child: Padding(
@@ -107,27 +106,30 @@ class _AccountsPayableViewState extends State<AccountsPayableView> {
   }
 
 
-  Widget imageProfile(AccountPayable account) {
-    return Image.network(
-       account.beneficiary.urlProfilePhoto,
-       loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-         if (loadingProgress == null) {
-           return child;
-         } else {
-           return Center(
-             child: CircularProgressIndicator(
-               value: loadingProgress.expectedTotalBytes != null
-                   ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
-                   : null,
-             ),
-           );
-         }
-       },
-       errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-         return avatar(account.beneficiary.name);
-       },
-     );
-  }
+Widget imageProfile(AccountPayable account) {
+  return account.beneficiary.photoUrl != null && account.beneficiary.photoUrl!.isNotEmpty
+      ? Image.network(
+          account.beneficiary.photoUrl!,
+          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) {
+              return child;
+            } else {
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                      : null,
+                ),
+              );
+            }
+          },
+          errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+            return avatar(account.beneficiary.name); // Widget alternativo en caso de error al cargar la imagen
+          },
+        )
+      : avatar(account.beneficiary.name); 
+}
+
 
   Widget filterAccountsPayableSelector() {
     return Row(

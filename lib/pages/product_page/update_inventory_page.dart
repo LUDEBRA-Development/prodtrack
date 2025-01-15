@@ -3,9 +3,10 @@ import 'package:get/get.dart';
 import 'package:prodtrack/controllers/account_Payable_controller.dart';
 import 'package:prodtrack/controllers/employee_contoller.dart';
 import 'package:prodtrack/controllers/product_controller.dart';
+import 'package:prodtrack/models/Activity.dart';
 import 'package:prodtrack/models/account_payable.dart';
-import 'package:prodtrack/models/employee.dart';
 import 'package:prodtrack/models/product.dart';
+import 'package:prodtrack/models/user_model.dart';
 import 'package:prodtrack/pages/index_pages.dart';
 import 'package:prodtrack/widgets/seach.dart';
 
@@ -24,7 +25,7 @@ class _UpdateInventoryPageState extends State<UpdateInventoryPage> {
   
   final TextEditingController _searchController = TextEditingController();
   
-  final List<Employee> _employeesSelected = [];
+  final List<UserModel> _employeesSelected = [];
   Map<String?, TextEditingController> amountControllers = {};
   bool _isLoading = false;
   @override
@@ -283,22 +284,34 @@ Widget _buildUpdateButton() {
                     const double priceLabour = 800;
                     double amount = 0;
 
-
+                   
                     for (int i = 0; i < widget.selectedProducts.length; i++) {
                       var product = widget.selectedProducts[i];
                       int quantityNew = quantitys[i];
                       amount =  (quantityNew * priceLabour) / _employeesSelected.length;
-
                       status = await productController.updateQuantity(product, quantityNew);
+                      Activity activity = Activity(
+                        productId: product.id,
+                        productName: product.name,
+                        employees: _employeesSelected,
+                        dateTime: DateTime.now(),
+                        quantity: quantitys[i],
+                      );
+                      
                       if (status) {
                         for (int i = 0; i < _employeesSelected.length; i++) {
                           AccountPayable accountPayable = AccountPayable(
                             beneficiary: _employeesSelected[i],
-                            dueDate: DateTime.now().add(const Duration(days: 30)),
+                            activity: [activity],
+                            dueDate: DateTime.now(),
                             amount: amount,
                           );
+
                           await accountPayableController.addAccountPayable(accountPayable);
-                        } 
+
+                        }
+
+
                       }
                     } 
                     productController.clearSelection();

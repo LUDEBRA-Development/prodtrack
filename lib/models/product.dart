@@ -4,7 +4,7 @@ import 'package:prodtrack/models/Ingredient.dart';
 import 'package:prodtrack/models/Packing.dart';
 
 class Product {
-   String? id; 
+  String? id; 
   final String name;
   final String description;
   final Box box;
@@ -44,8 +44,9 @@ class Product {
       Packing.fromMap(map['packing']), 
       Box.fromMap(map['box']), 
       (map['ingredient'] as List).map((input) => Ingredient.fromMap(input)).toList(), 
-      map['priceLabel'],
-      map['priceLabeled'],
+
+      map['priceLabel'] is int ? (map['priceLabel'] as int).toDouble() : map['priceLabel'],
+      map['priceLabeled'] is int ? (map['priceLabeled'] as int).toDouble() : map['priceLabeled'],
     );
   }
 

@@ -32,6 +32,7 @@ class AccountPayableController extends GetxController {
       isLoading.value = false;
     }
   }
+    
 
   // Filtrar cuentas por pagar por beneficiario o fecha de vencimiento
   void filterAccountsPayable(String query) {
@@ -51,8 +52,8 @@ class AccountPayableController extends GetxController {
   Future<void> addAccountPayable(AccountPayable accountPayable) async {
     try {
       await accountPayableService.saveAccountPayable(accountPayable);
-      accountsPayable.add(accountPayable);  // Añadir nueva cuenta a la lista actual
-      filteredAccountsPayable.add(accountPayable);  // Actualizar también la lista filtrada
+/*       accountsPayable.add(accountPayable);  // Añadir nueva cuenta a la lista actual
+      filteredAccountsPayable.add(accountPayable);  // Actualizar también la lista filtrada */
     } catch (e) {
       Get.snackbar('Error', 'No se pudo agregar la cuenta por pagar');
     }
@@ -87,20 +88,29 @@ class AccountPayableController extends GetxController {
     fetchAccountsPayable();
   }
 
-void filterAccountsPayableForStatus(String query, {String? status}) {
-  filteredAccountsPayable.value = accountsPayable.where((account) {
-    final beneficiaryName = account.beneficiary.name?.toLowerCase() ?? '';
-    final dueDateString = account.dueDate.toString();
-    final matchesSearch = beneficiaryName.contains(query.toLowerCase()) ||
-                          dueDateString.contains(query);
+  void filterAccountsPayableForStatus(String query, {String? status}) {
+    filteredAccountsPayable.value = accountsPayable.where((account) {
+      final beneficiaryName = account.beneficiary.name?.toLowerCase() ?? '';
+      final dueDateString = account.dueDate.toString();
+      final matchesSearch = beneficiaryName.contains(query.toLowerCase()) ||
+                            dueDateString.contains(query);
 
-    if (status != null && status != 'Todos') {
-      bool isPaid = status == 'Pagados';
-      return matchesSearch && account.isPaid == isPaid;
-    }
+      if (status != null && status != 'Todos') {
+        bool isPaid = status == 'Pagados';
+        return matchesSearch && account.isPaid == isPaid;
+      }
 
-    return matchesSearch;  
-  }).toList();
-}
+      return matchesSearch;  
+    }).toList();
+  }
 
+  void fetchIdAccountsPayable(String? id) async {
+    filteredAccountsPayable.value = accountsPayable.where((account) {
+      return account.beneficiary.id == id && account.isPaid == false;
+    }).toList();
+  }
+
+
+
+  
 }

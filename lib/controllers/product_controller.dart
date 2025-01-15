@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:prodtrack/models/Ingredient.dart';
 import 'package:prodtrack/models/product.dart';
 import 'package:prodtrack/pages/index_pages.dart';

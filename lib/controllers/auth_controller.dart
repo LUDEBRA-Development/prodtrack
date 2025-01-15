@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:prodtrack/pages/employee/index_employee_page.dart';
 import 'package:prodtrack/pages/index_pages.dart';
 import 'package:prodtrack/pages/login_page.dart';
 import 'package:prodtrack/services/firebase_service.dart';
@@ -31,19 +32,18 @@ class AuthController extends GetxController {
       isLoading.value = true; // Indicador de carga activado.
 
       // Registrar al usuario en Firebase.
-      User? newUser = await _firebaseService.registerWithEmail(
-          email, password, name, lastName, id);
+      User? newUser = await _firebaseService.registerWithEmail( email, password, name, lastName, id);
 
       if (newUser != null) {
         // Actualizar el perfil del usuario con el nombre completo (nombre y apellido).
         await newUser.updateDisplayName('$name $lastName');
         await newUser.reload(); // Recargar los datos del usuario.
-        user.value =
-            FirebaseAuth.instance.currentUser; // Actualizar el usuario actual.
+        user.value = FirebaseAuth.instance.currentUser; // Actualizar el usuario actual.
 
         // Guardar las credenciales localmente incluyendo todos los datos adicionales.
         await _saveCredentials(email, password, name, lastName, id);
-        Get.offAll(() => const indexPages()); // Redirigir a la página de inicio.
+        Get.snackbar("Mensaje", "Se  registro  de forma exitosa");
+        Get.offAll(() =>  LoginPage()); // Redirigir a la página de inicio.
       } else {
         Get.snackbar("Error", "No se pudo registrar el usuario");
       }
@@ -55,27 +55,41 @@ class AuthController extends GetxController {
   }
 
   // Método para iniciar sesión con email y contraseña.
-  Future<void> login(String email, String password) async {
-    try {
-      isLoading.value = true; // Indicador de carga activado.
-      // Iniciar sesión en Firebase.
-      User? loggedInUser =
-          await _firebaseService.loginWithEmail(email, password);
+Future<void> login(String email, String password) async {
+  try {
+    isLoading.value = true; 
+    User? loggedInUser = await _firebaseService.loginWithEmail(email, password);
+    Map<String, dynamic>? userInfo = await _firebaseService.getUserRoleAndStatus();
 
-      if (loggedInUser != null) {
-        user.value = loggedInUser; // Guardar el usuario autenticado.
-        await _saveCredentials(email, password, "", "",
-            ""); // Guardar las credenciales localmente.
-        Get.offAll(() => indexPages()); // Redirigir a la página de inicio.
-      } else {
-        Get.snackbar("Error", "No se pudo iniciar sesión");
+    if (loggedInUser != null && userInfo != null) {
+      user.value = loggedInUser; 
+      await _saveCredentials(email, password, "", "", ""); // Guardar las credenciales localmente.
+
+      bool isActive = userInfo['isActive'] ?? false; // Asegúrate de manejar null con un valor por defecto.
+      String role = userInfo['rol'] ?? '';
+
+      if (!isActive) {
+        Get.snackbar("Error", "El usuario no está activado. Por favor, contacta al administrador.");
+        return; // Termina la ejecución si el usuario no está activo.
       }
-    } catch (e) {
-      Get.snackbar("Error", "Ocurrió un error durante el inicio de sesión");
-    } finally {
-      isLoading.value = false; // Apagar el indicador de carga.
+
+      if (role == 'admin') {
+        Get.offAll(() => const indexPages()); // Redirige a la página de administradores.
+      } else if (role == 'employee') {
+        Get.offAll(() =>  indexPagesEmployee()); // Redirige a la página de usuarios normales.
+      } else {
+        Get.snackbar("Error", "El usuario no tiene un rol válido. Por favor, contacta al soporte.");
+      }
+    } else {
+      Get.snackbar("Error", "No se pudo iniciar sesión. Verifica tus credenciales.");
     }
+  } catch (e) {
+    Get.snackbar("Error", "Ocurrió un error durante el inicio de sesión: $e");
+  } finally {
+    isLoading.value = false; // Apaga el indicador de carga.
   }
+}
+
 
   // Método para cerrar sesión.
   Future<void> signOut() async {

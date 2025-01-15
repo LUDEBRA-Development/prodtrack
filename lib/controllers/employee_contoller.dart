@@ -1,14 +1,14 @@
 import 'package:get/get.dart';
-import 'package:prodtrack/models/employee.dart';
+import 'package:prodtrack/models/user_model.dart';
 import 'package:prodtrack/services/employee_service.dart';
 
 class EmployeeController extends GetxController {
   final EmployeeService _employeeService = EmployeeService();
   
   // Lista de empleados observables
-  RxList<Employee> employees = <Employee>[].obs;
+  RxList<UserModel> employees = <UserModel>[].obs;
     // Lista filtrada de proveedores observables
-  RxList<Employee> filteredEmployees = <Employee>[].obs;
+  RxList<UserModel> filteredEmployees = <UserModel>[].obs;
 
   // Estado de carga
   RxBool isLoading = false.obs;
@@ -46,27 +46,9 @@ void fetchEmployees() async {
     }
   }
   // Agregar un empleado
-  Future<void> addEmployee(Employee employee) async {
-    try {
-      await _employeeService.saveEmployee(employee);
-      employees.add(employee);  // Añadir nuevo empleado a la lista actual
-    } catch (e) {
-      Get.snackbar('Error', 'No se pudo agregar el empleado');
-    }
-  }
 
-  // Actualizar un empleado
-  Future<void> updateEmployee(Employee employee) async {
-    try {
-      await _employeeService.updateEmployee(employee);
-      int index = employees.indexWhere((e) => e.id == employee.id);
-      if (index != -1) {
-        employees[index] = employee;  // Actualizar empleado en la lista
-      }
-    } catch (e) {
-      Get.snackbar('Error', 'No se pudo actualizar el empleado');
-    }
-  }
+
+
 
   // Eliminar un empleado
   Future<void> deleteEmployee(int employeeId) async {

@@ -23,9 +23,10 @@ class Box {
     return Box(
       map['id'],
       map['name'],
-      map['price'],
+      map['price'] is int ? (map['price'] as int).toDouble() : map['price'],
       map['quantity'],
       map['ability'],
     );
   }
+
 }

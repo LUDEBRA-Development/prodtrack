@@ -19,8 +19,25 @@ class UserService {
   }
 
   
-  Future<void> updateUser(UserModel user) async {
+/*   Future<void> updateUser(UserModel user) async {
     await _firestore.collection('users').doc(user.id).update(user.toMap());
+  } */
+  Future<void> updateUser(UserModel user) async {
+    // Buscar el documento que tenga la cédula especificada en `user.id`
+    final querySnapshot = await _firestore
+        .collection('users')
+        .where('id', isEqualTo: user.id)
+        .get();
+
+    // Verificar si se encontró un documento
+    if (querySnapshot.docs.isNotEmpty) {
+      final docId = querySnapshot.docs.first.id; // Obtener el ID del documento
+
+      // Actualizar el documento usando el ID encontrado
+      await _firestore.collection('users').doc(docId).update(user.toMap());
+    } else {
+      throw Exception('Usuario con cédula ${user.id} no encontrado.');
+    }
   }
 
   Future<List<UserModel>> getAllUsers() async {

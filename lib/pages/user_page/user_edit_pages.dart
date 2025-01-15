@@ -156,6 +156,8 @@ class _UserEditPageState extends State<UserEditPage> {
       email: _emailController.text,
       phone: _phoneController.text,
       photoUrl: profilePhotoUrl,
+      isActive: widget.user.isActive,
+      rol:  widget.user.rol
     );
 
     await userController.updateUser(updatedUser);

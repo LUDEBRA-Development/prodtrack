@@ -25,6 +25,8 @@ class FirebaseService {
           'lastName': lastName,
           'id': id,
           'createdAt': FieldValue.serverTimestamp(),
+          'rol' : 'usuario',
+          'isActive' : false
         });
       }
 
@@ -54,13 +56,34 @@ class FirebaseService {
     try {
       User? user = _auth.currentUser;
       if (user != null) {
-        DocumentSnapshot userDoc =
-            await _firestore.collection('users').doc(user.uid).get();
+        DocumentSnapshot userDoc = await _firestore.collection('users').doc(user.uid).get();
         return userDoc['name']; // Devuelve el nombre del usuario
       }
       return null;
     } catch (e) {
       print("Error al obtener el nombre del usuario: $e");
+      return null;
+    }
+  }
+  
+  Future<Map<String, dynamic>?> getUserRoleAndStatus() async {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null) {
+        DocumentSnapshot userDoc = await _firestore.collection('users').doc(user.uid).get();
+
+        // Verifica si el documento existe
+        if (userDoc.exists) {
+          String role = userDoc['rol']; // Obtiene el rol del usuario
+          bool isActive = userDoc['isActive']; // Obtiene el estado del usuario
+
+          // Retorna el rol y el estado en un mapa
+          return {'rol': role, 'isActive': isActive};
+        }
+      }
+      return null;
+    } catch (e) {
+      print("Error al obtener el rol y el estado del usuario: $e");
       return null;
     }
   }

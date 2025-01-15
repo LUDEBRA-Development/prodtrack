@@ -22,9 +22,16 @@ Future<void> saveAccountPayable(AccountPayable accountPayable) async {
       double existingAmount = existingDoc['amount'];
       DocumentReference docRef = existingDoc.reference;
 
-      // Suma el nuevo monto al existente
+      // Obtén las actividades existentes
+      List<dynamic> existingActivities = existingDoc['activity'] ?? [];
+
+      // Añadir la nueva actividad a las actividades existentes
+      existingActivities.addAll(accountPayable.activity.map((activity) => activity.toMap()));
+
+      // Actualiza el monto y las actividades
       await docRef.update({
         'amount': existingAmount + accountPayable.amount,
+        'activity': existingActivities,
       });
     } else {
       // Si la cuenta ya está pagada, crea una nueva cuenta por pagar

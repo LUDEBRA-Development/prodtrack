@@ -39,14 +39,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 241, 241, 241),
+      backgroundColor: const  Color.fromARGB(255, 241, 241, 241),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         title: const Text('PRODTRACK'),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications),
             onPressed: () {
               // Acción para la campana
             },
