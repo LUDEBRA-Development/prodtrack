@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:prodtrack/models/Ingredient.dart';
 
 class IngredientsService {
-  final String ingredientCollection = "ingredients";
+  final String ingredientCollection = "Ingredients";
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> saveIngredient(Ingredient ingredient) async {
@@ -12,12 +12,14 @@ class IngredientsService {
     ingredient.id = docRef.id;
   }
 
-  // Leer (Obtener) todos los proveedores
-  Future<List<Ingredient>> getAllIngredients() async {
-    QuerySnapshot snapshot =
-        await _firestore.collection(ingredientCollection).get();
-    return snapshot.docs.map((doc) => Ingredient.fromDocument(doc)).toList();
-  }
+Future<List<Ingredient>> getAllIngredients() async {
+  QuerySnapshot snapshot =
+      await _firestore.collection(ingredientCollection).get();
+  List<Ingredient> ingredients = snapshot.docs.map((doc) => Ingredient.fromDocument(doc)).toList();
+  
+  print("Ingredientes desde Firebase: ${ingredients.length}");
+  return ingredients;
+}
 
   // Obtener un proveedor por ID
   Future<Ingredient?> getIngredientById(String id) async {

@@ -25,24 +25,8 @@ class IngredientsController extends GetxController {
 
   // Obtener todos los ingredientes del servicio y actualizar las listas observables
   void fetchIngredients() async {
-    // try {
-    //   isLoading.value = true;
-    //   ingredients.value = await _ingredientService.getAllIngredients();
-    //   // Obtener el último ID existente para continuar desde ahí
-    //   if (ingredients.isNotEmpty) {
-    //     _nextId.value =
-    //         int.parse(ingredients.last.id!) + 1; // Esto suma 1 al id numérico
-    //   }
-    //   filteredIngredients.value =
-    //       ingredients; // Mostrar todos los ingredientes al inicio
-    // } catch (e) {
-    //   Get.snackbar('Error', 'No se pudieron cargar los ingredientes');
-    // } finally {
-    //   isLoading.value = false;
-    // }
-
     ingredients.value = await _ingredientService .getAllIngredients(); // Obtener todos los ingredientes
-    ingredients.sort((a, b) => a.name.compareTo(b.name));
+    //ingredients.sort((a, b) => a.name.compareTo(b.name));
     filteredIngredients.value = ingredients; // Actualizar la lista filtrada
   }
 
@@ -70,7 +54,7 @@ class IngredientsController extends GetxController {
 
   // Agregar un ingrediente con ID autoincrementable
   Future<void> addIngredient(Ingredient ingredient) async {
-    try {
+/*     try { */
       // Asignar el ID autoincrementable
       ingredient.id = _nextId.value
           .toString(); // Convertir _nextId de int a String antes de asignarlo a ingredient.id
@@ -79,9 +63,9 @@ class IngredientsController extends GetxController {
 
       await _ingredientService.saveIngredient(ingredient);
       ingredients.add(ingredient); // Añadir nuevo ingrediente a la lista actual
-    } catch (e) {
+/*     } catch (e) {
       Get.snackbar('Error', 'No se pudo agregar el ingrediente');
-    }
+    } */
   }
 
   // Actualizar un ingrediente

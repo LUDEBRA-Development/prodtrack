@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: LoginPage(), // La página principal de tu aplicación.
+          home:   LoginPage(), // La página principal de tu aplicación.
         );
       },
     );

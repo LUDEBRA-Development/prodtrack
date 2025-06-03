@@ -71,7 +71,7 @@ class _CreateIngredientViewState extends State<CreateIngredientView> {
             onPressed: () {
               // Crear nuevo ingrediente
 
-              try {
+/*               try { */
                 Ingredient newIngredient = Ingredient(
                   name: _nameController.text,
                   quantityUsed: double.parse(_quantityUsedController.text),
@@ -86,16 +86,16 @@ class _CreateIngredientViewState extends State<CreateIngredientView> {
                 );
 
                 ingredientsController.addIngredient(newIngredient);
-                Navigator.of(context).pop(); // Volver a la vista anterior
+                Navigator.of(context).pop(); 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("${newIngredient.name} guardado")),
                 );
-              } catch (e) {
+/*               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                       content: Text("Error al guardar el ingrediente")),
                 );
-              }
+              } */
             },
           ),
         ],
